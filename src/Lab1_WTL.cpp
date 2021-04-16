@@ -24,15 +24,15 @@ public:
         MESSAGE_HANDLER(WM_DESTROY, OnDestroy)
         MESSAGE_HANDLER(WM_COMMAND,OnCommand)
     END_MSG_MAP()
-    LRESULT OnCommand(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
+    LRESULT OnCommand( UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled )
     {
-        switch (wParam)
+        switch( wParam )
         {
         case IDM_EXIT:
             DestroyWindow();
             return 0;
         case ID_SEARCH:
-            OnSearch(uMsg, wParam, lParam, bHandled);
+            OnSearch( uMsg, wParam, lParam, bHandled );
             return 0;
         case ID_About:
             CAboutDlg AboutDialog;
@@ -41,26 +41,26 @@ public:
         }
         return 0;
     }
-    LRESULT OnPaint(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
+    LRESULT OnPaint( UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled )
     {
-        CPaintDC dc(m_hWnd);
+        CPaintDC dc( m_hWnd );
         CRect rect;
-        GetClientRect(rect);
-        dc.DrawTextW(TEXT("Приветствую в моем маленьком проводнике, искатель)"), -1, rect, DT_SINGLELINE | DT_CENTER | DT_VCENTER);
+        GetClientRect( rect );
+        dc.DrawTextW( TEXT( "Приветствую в моем маленьком проводнике, искатель)" ), -1, rect, DT_SINGLELINE | DT_CENTER | DT_VCENTER );
         return 0;
     }
-    LRESULT OnDestroy(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
+    LRESULT OnDestroy( UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled )
     {
-        PostQuitMessage(0);
+        PostQuitMessage( 0 );
         return 0;
     }
-    LRESULT OnInit(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
+    LRESULT OnInit( UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled )
     {
-        myMenu.LoadMenuW(IDC_LAB1WTL);
-        SetMenu(myMenu);
+        myMenu.LoadMenuW( IDC_LAB1WTL );
+        SetMenu( myMenu );
         return 0;
     }
-    LRESULT OnSearch(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
+    LRESULT OnSearch( UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled )
     {
         MyDialogBar SearchBar;
         SearchBar.DoModal();

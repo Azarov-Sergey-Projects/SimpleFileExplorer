@@ -30,6 +30,7 @@ public:
 	
 	LRESULT OnCommand(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 	{
+		
 		switch (wParam)
 		{
 		case IDC_BUTTON_EXIT:
@@ -44,10 +45,9 @@ public:
 			}
 			else
 			{
-				//ListView_DeleteAllItems(this->myListView.m_hWnd);
 				if (FindThread.joinable())
 				{
-					FindThread.detach();
+					FindThread.join();
 					FindThread = std::thread((&Finder::FindFile), this->myListView, FilePath);
 				}
 				else
