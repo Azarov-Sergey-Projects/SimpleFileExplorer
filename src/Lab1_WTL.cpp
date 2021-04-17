@@ -28,16 +28,16 @@ public:
     {
         switch( wParam )
         {
-        case IDM_EXIT:
-            DestroyWindow();
-            return 0;
-        case ID_SEARCH:
-            OnSearch( uMsg, wParam, lParam, bHandled );
-            return 0;
-        case ID_About:
-            CAboutDlg AboutDialog;
-            AboutDialog.DoModal();
-            return 0;
+            case IDM_EXIT:
+                DestroyWindow();
+                return 0;
+            case ID_SEARCH:
+                OnSearch( uMsg, wParam, lParam, bHandled );
+                return 0;
+            case ID_About:
+                CAboutDlg AboutDialog;
+                AboutDialog.DoModal();
+                return 0;
         }
         return 0;
     }

@@ -3,7 +3,7 @@ void Finder::Create( HWND m_hWnd )
 {
 	CRect myRect{ 0,0,600,400 };
 	myListView.Create( m_hWnd, myRect, NULL, WS_CHILD | WS_VISIBLE | WS_CLIPSIBLINGS | WS_CLIPCHILDREN |
-		LVS_REPORT | LVS_AUTOARRANGE | LVS_SHOWSELALWAYS | LVS_SHAREIMAGELISTS );
+					   LVS_REPORT | LVS_AUTOARRANGE | LVS_SHOWSELALWAYS | LVS_SHAREIMAGELISTS );
 	myListView.InsertColumn( 0, TEXT( "Название" ), LVCFMT_LEFT, 290 );
 	myListView.InsertColumn( 1, TEXT( ".*" ), LVCFMT_LEFT, 50 );
 	myListView.InsertColumn( 2, TEXT( "Полный путь" ), LVCFMT_LEFT, 290 );
@@ -95,8 +95,8 @@ BOOL Finder::InitListViewImage( int size, CString path )
 	HIMAGELIST hSmall;
 	SHFILEINFO lp{};
 	hSmall = ImageList_Create( GetSystemMetrics( SM_CXSMICON ),
-		GetSystemMetrics( SM_CYSMICON ),
-		ILC_MASK | ILC_COLOR32, size, 1 );
+							   GetSystemMetrics( SM_CYSMICON ),
+							   ILC_MASK | ILC_COLOR32, size, 1 );
 	bool hFind = F.FindFile( path );
 	if( !hFind )
 	{
@@ -112,7 +112,7 @@ BOOL Finder::InitListViewImage( int size, CString path )
 			}
 			DWORD num = GetFileAttributesW( F.GetFilePath() );
 			SHGetFileInfoW( F.GetFilePath(), num, &lp, sizeof( lp ),
-				SHGFI_SYSICONINDEX | SHGFI_ICON | SHGFI_USEFILEATTRIBUTES );
+							SHGFI_SYSICONINDEX | SHGFI_ICON | SHGFI_USEFILEATTRIBUTES );
 			ImageList_AddIcon( hSmall, lp.hIcon );
 			DestroyIcon( lp.hIcon );
 		} while( F.FindNextFileW() );
