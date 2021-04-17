@@ -19,29 +19,29 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\AboutDlg.h" />
-    <ClInclude Include="src\Finder.h" />
-    <ClInclude Include="src\framework.h" />
-    <ClInclude Include="src\Lab1_WTL.h" />
-    <ClInclude Include="src\MyDialogBar.h" />
-    <ClInclude Include="src\resource.h" />
-    <ClInclude Include="src\resource1.h" />
-    <ClInclude Include="src\resource2.h" />
-    <ClInclude Include="src\targetver.h" />
+    <ClInclude Include="..\src\AboutDlg.h" />
+    <ClInclude Include="..\src\Finder.h" />
+    <ClInclude Include="..\src\framework.h" />
+    <ClInclude Include="..\src\Lab1_WTL.h" />
+    <ClInclude Include="..\src\MyDialogBar.h" />
+    <ClInclude Include="..\src\resource.h" />
+    <ClInclude Include="..\src\resource1.h" />
+    <ClInclude Include="..\src\resource2.h" />
+    <ClInclude Include="..\src\targetver.h" />
   </ItemGroup>
   <ItemGroup>
-    <Image Include="rec\Lab1_WTL.ico" />
-    <Image Include="rec\small.ico" />
-    <Image Include="rec\toolbar1.bmp" />
+    <Image Include="..\rec\Lab1_WTL.ico" />
+    <Image Include="..\rec\small.ico" />
+    <Image Include="..\rec\toolbar1.bmp" />
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="rec\Lab1_WTL.rc" />
-    <ResourceCompile Include="rec\MyDialog.rc" />
-    <ResourceCompile Include="rec\ToolBar.rc" />
+    <ResourceCompile Include="..\rec\Lab1_WTL.rc" />
+    <ResourceCompile Include="..\rec\MyDialog.rc" />
+    <ResourceCompile Include="..\rec\ToolBar.rc" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\Finder.cpp" />
-    <ClCompile Include="src\Lab1_WTL.cpp" />
+    <ClCompile Include="..\src\Finder.cpp" />
+    <ClCompile Include="..\src\Lab1_WTL.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
@@ -113,7 +113,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>D:\Labs_NIX\FileExplorer\thirdparty\WTL\Include;$(ProjectDir)../thirdparty/WTL/Include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)../thirdparty/WTL/Include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>

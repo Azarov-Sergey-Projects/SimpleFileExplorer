@@ -15,61 +15,61 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\AboutDlg.h">
+    <ClInclude Include="..\src\AboutDlg.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Finder.h">
+    <ClInclude Include="..\src\Finder.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\framework.h">
+    <ClInclude Include="..\src\framework.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Lab1_WTL.h">
+    <ClInclude Include="..\src\Lab1_WTL.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\MyDialogBar.h">
+    <ClInclude Include="..\src\MyDialogBar.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\resource.h">
+    <ClInclude Include="..\src\resource.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\resource1.h">
+    <ClInclude Include="..\src\resource1.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\resource2.h">
+    <ClInclude Include="..\src\resource2.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\targetver.h">
+    <ClInclude Include="..\src\targetver.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <Image Include="rec\Lab1_WTL.ico">
+    <Image Include="..\rec\Lab1_WTL.ico">
       <Filter>Resource Files</Filter>
     </Image>
-    <Image Include="rec\small.ico">
+    <Image Include="..\rec\small.ico">
       <Filter>Resource Files</Filter>
     </Image>
-    <Image Include="rec\toolbar1.bmp">
+    <Image Include="..\rec\toolbar1.bmp">
       <Filter>Resource Files</Filter>
     </Image>
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="rec\Lab1_WTL.rc">
+    <ResourceCompile Include="..\rec\Lab1_WTL.rc">
       <Filter>Resource Files</Filter>
     </ResourceCompile>
-    <ResourceCompile Include="rec\MyDialog.rc">
+    <ResourceCompile Include="..\rec\MyDialog.rc">
       <Filter>Resource Files</Filter>
     </ResourceCompile>
-    <ResourceCompile Include="rec\ToolBar.rc">
+    <ResourceCompile Include="..\rec\ToolBar.rc">
       <Filter>Resource Files</Filter>
     </ResourceCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\Finder.cpp">
+    <ClCompile Include="..\src\Finder.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Lab1_WTL.cpp">
+    <ClCompile Include="..\src\Lab1_WTL.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

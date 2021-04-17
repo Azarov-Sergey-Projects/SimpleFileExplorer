@@ -8,6 +8,8 @@ void Finder::Create( HWND m_hWnd )
 	myListView.InsertColumn( 1, TEXT( ".*" ), LVCFMT_LEFT, 50 );
 	myListView.InsertColumn( 2, TEXT( "Полный путь" ), LVCFMT_LEFT, 290 );
 }
+
+
 void Finder::FindFile( CString szPath )
 {
 	HIMAGELIST hSmall{};
