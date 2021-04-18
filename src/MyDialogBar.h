@@ -1,6 +1,7 @@
 #pragma once
 
 #include <thread>
+#include <atomic>
 #include <Commctrl.h>
 #include "resource.h"
 #include "resource2.h"
@@ -102,7 +103,7 @@ public:
 	{
 		if( FindThread.joinable() )
 		{
-			FindThread.detach();
+			FindThread.join();
 		}
 		EndDialog( NULL );
 		return 0;
@@ -110,6 +111,7 @@ public:
 
 
 private:
+	std::atomic <BOOL> atom=false;
 	CString FilePath;
 	Finder myListView;
 	std::thread FindThread;

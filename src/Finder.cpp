@@ -60,7 +60,7 @@ void Finder::View_List( CString name, int i, CString path )
 	lvItem.iItem = i;
 	lvItem.iImage = i;
 	lvItem.iSubItem = 0;
-	lvItem.pszText = ( LPWSTR )nameWithoutEx.GetString();
+	lvItem.pszText = const_cast<LPWSTR>(nameWithoutEx.GetString());
 	lvItem.cchTextMax = nameWithoutEx.GetLength();
 	myListView.InsertItem( &lvItem );
 	myListView.SetItemText( i, 1, extention.GetString() );
