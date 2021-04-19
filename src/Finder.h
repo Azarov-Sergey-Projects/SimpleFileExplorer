@@ -31,9 +31,9 @@ public:
     {
         return my_hWnd;
     }
-    DWORD_PTR GetItemData( INT nItem )const
+    BOOL GetItemText( INT nItem, int nSub,CString& pszText )const
     {
-        return myListView.GetItemData( nItem );
+        return myListView.GetItemText(nItem,nSub,pszText );
     }
 private:
     LVITEM lvItem;

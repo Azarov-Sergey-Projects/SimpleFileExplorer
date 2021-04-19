@@ -67,24 +67,25 @@ public:
 
 	LRESULT OnItemClick( int, LPNMHDR pnmh, BOOL& )
 	{
+		CRect myRect{ 605,0,1000,1000 };
+		CStatic imageFile;
+		imageFile.Create( this->m_hWnd,myRect,NULL, WS_CHILD | WS_VISIBLE|SS_BLACKRECT|SS_BITMAP,NULL,1,pnmh );
 		CString fileName;
-		LPNMITEMACTIVATE lpItem = ( LPNMITEMACTIVATE )pnmh;
-		LVITEM ImageInfo{};
-		ImageInfo.iItem = lpItem->iItem;
-		ImageInfo.mask = LVIF_PARAM | LVIF_TEXT;
-		fileName.SetString(reinterpret_cast<LPCWSTR>(myListView.GetItemData( lpItem->iItem )));
+		LPNMITEMACTIVATE lpItem = reinterpret_cast< LPNMITEMACTIVATE >( pnmh );
+		myListView.GetItemText( lpItem->iItem, 1, fileName );//получаю имя файла с расширением
 		CString text;
 		text = std::get<1>( myListView.Split( fileName ) );
 
-		if( text.GetString() == TEXT( ".bmp" ) || text.GetString() == TEXT( ".jpeg" ) )
+		if( text == TEXT( ".bmp" ) || text == TEXT( ".jpg" ) )
 		{
-			HBITMAP Image = reinterpret_cast< HBITMAP >( LoadImage( NULL, ImageInfo.pszText, IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE ) );
-			MessageBox( TEXT( "I am here" ), TEXT( "Here" ) );
+			myListView.GetItemText( lpItem->iItem, 2, fileName );//получаю путь к файлу файла
+			HBITMAP Image = reinterpret_cast< HBITMAP >( LoadImageW( NULL, fileName.GetString(), IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE ) );
+			imageFile.SetBitmap( Image );
 			return 0;
 		}
 		else
 		{
-			//MessageBox(TEXT("I am here ELSE"), TEXT("Here"));
+			MessageBox(TEXT("I am here ELSE"), TEXT("Here"));
 			return 0;
 		}
 		return 0;
