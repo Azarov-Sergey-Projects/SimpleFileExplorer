@@ -1,10 +1,10 @@
 #include "Finder.h"
 void Finder::create( HWND m_hWnd )
 {
-	CRect myRect{ 0,0,600,400 };
-	my_hWnd=myListView.Create( m_hWnd, myRect, NULL, WS_CHILD | WS_VISIBLE |
+	//CRect myRect{ 0,0,600,400 };
+	my_hWnd=myListView.Create( m_hWnd, sizeListView, NULL, WS_CHILD | WS_VISIBLE|WS_VSCROLL|
 					   WS_CLIPSIBLINGS | WS_CLIPCHILDREN |
-					   LVS_REPORT | LVS_AUTOARRANGE | 
+					   LVS_REPORT | LVS_AUTOARRANGE | DS_ABSALIGN|
 					   LVS_SHOWSELALWAYS | LVS_SHAREIMAGELISTS );
 	myListView.InsertColumn( 0, TEXT( "Название" ), LVCFMT_LEFT, 290 );
 	myListView.InsertColumn( 1, TEXT( ".*" ), LVCFMT_LEFT, 50 );
@@ -92,7 +92,6 @@ std::tuple<CString, CString> Finder::Split( CString buf )
 	}
 }
 
-
 BOOL Finder::initListViewImage( int size, CString path )
 {
 	CFindFile F;
@@ -124,4 +123,51 @@ BOOL Finder::initListViewImage( int size, CString path )
 	}
 	myListView.SetImageList( hSmall, 1 );
 	return TRUE;
+}
+
+HWND Finder::GetHWND()const
+{
+	return my_hWnd;
+}
+BOOL Finder::GetItemText( INT nItem, int nSub,CString& pszText )const
+{
+	return myListView.GetItemText(nItem,nSub,pszText );
+}
+
+void Finder::SetDialogSize( CRect rect )
+{
+	sizeDialogBox = rect;
+	SetListViewSize();
+	SetImagePreViewSize();
+}
+
+void Finder::SetListViewSize()
+{
+	sizeListView.bottom= sizeDialogBox.bottom-sizeDialogBox.bottom/8;
+	sizeListView.top =sizeDialogBox.top;
+	sizeListView.right =sizeDialogBox.right-sizeDialogBox.right/2.5;
+	sizeListView.left =sizeDialogBox.left;
+}
+
+void Finder::SetImagePreViewSize()
+{
+	sizeImagePreView.top = sizeListView.top;
+	sizeImagePreView.left = sizeListView.right;
+	sizeImagePreView.bottom = sizeListView.bottom;
+	sizeImagePreView.right = sizeDialogBox.right;
+}
+
+CRect Finder::GetImagePreViewSize()const
+{
+	return sizeImagePreView;
+}
+
+INT Finder::xGetImageSize()const
+{
+	return sizeDialogBox.right - sizeListView.right;
+}
+
+INT Finder::yGetImageSize()const
+{
+	return sizeListView.bottom;
 }

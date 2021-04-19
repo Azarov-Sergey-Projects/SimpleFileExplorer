@@ -67,19 +67,21 @@ public:
 
 	LRESULT OnItemClick( int, LPNMHDR pnmh, BOOL& )
 	{
-		CRect myRect{ 605,1,0,0 };
+		//CRect myRect{ 605,1,0,0 };
 		CStatic imageFile;
-		imageFile.Create( this->m_hWnd,myRect,NULL, WS_CHILD | WS_VISIBLE|SS_BITMAP,NULL,1,pnmh );
+		imageFile.Create( this->m_hWnd,static_cast<ATL::_U_RECT>(myListView.GetImagePreViewSize()),NULL, WS_CHILD | WS_VISIBLE|SS_BITMAP,NULL,1,pnmh );
 		CString fileName;
 		LPNMITEMACTIVATE lpItem = reinterpret_cast< LPNMITEMACTIVATE >( pnmh );
 		myListView.GetItemText( lpItem->iItem, 1, fileName );//получаю имя файла с расширением
 		CString text;
 		text = std::get<1>( myListView.Split( fileName ) );
 
-		if( text == TEXT( ".bmp" ) || text == TEXT( ".jpg" ) )
+		if( text == TEXT( ".bmp" ) )
 		{
 			myListView.GetItemText( lpItem->iItem, 2, fileName );//получаю путь к файлу файла
-			HBITMAP Image = reinterpret_cast< HBITMAP >( LoadImageW( NULL, fileName.GetString(), IMAGE_BITMAP, 430, 430, LR_LOADFROMFILE ) );
+			HBITMAP Image = reinterpret_cast< HBITMAP >( LoadImageW( NULL, fileName.GetString(), IMAGE_BITMAP, 
+																	 myListView.xGetImageSize(), myListView.yGetImageSize(),
+																	 LR_LOADFROMFILE ) );
 			imageFile.SetBitmap( Image );
 			return 0;
 		}
@@ -87,6 +89,7 @@ public:
 		{
 			//imageFile.DestroyWindow();
 			imageFile.RedrawWindow();
+			imageFile.DestroyWindow();
 			return 0;
 		}
 		return 0;
@@ -95,6 +98,9 @@ public:
 
 	LRESULT OnInitDialog( UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/ )
 	{
+		CRect dialogRect;
+		GetClientRect( &dialogRect );
+		myListView.SetDialogSize( dialogRect );
 		myListView.create( m_hWnd );
 		return 0;
 	}

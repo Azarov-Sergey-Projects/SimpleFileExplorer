@@ -27,17 +27,21 @@ public:
     void view_List( CString buf, int i, CString path );
     BOOL initListViewImage( int size, CString path );
     std::tuple<CString, CString> Split( CString buf );
-    HWND GetHWND()const
-    {
-        return my_hWnd;
-    }
-    BOOL GetItemText( INT nItem, int nSub,CString& pszText )const
-    {
-        return myListView.GetItemText(nItem,nSub,pszText );
-    }
+    HWND GetHWND()const;
+    BOOL GetItemText( INT nItem, int nSub, CString& pszText )const;
+    void SetDialogSize( CRect rect );
+    void SetListViewSize();
+    void SetImagePreViewSize();
+    CRect GetImagePreViewSize()const;
+    INT xGetImageSize()const;
+    INT yGetImageSize()const;
+
 private:
     LVITEM lvItem;
     CListViewCtrl myListView;
     CString path;
+    CRect sizeDialogBox;
+    CRect sizeListView;
+    CRect sizeImagePreView;
     HWND my_hWnd;
 };
