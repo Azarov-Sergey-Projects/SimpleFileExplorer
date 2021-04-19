@@ -35,6 +35,7 @@ public:
     CRect GetImagePreViewSize()const;
     INT xGetImageSize()const;
     INT yGetImageSize()const;
+    void Redraw(CRect rect);
 
 private:
     LVITEM lvItem;

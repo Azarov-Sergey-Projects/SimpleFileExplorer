@@ -171,3 +171,10 @@ INT Finder::yGetImageSize()const
 {
 	return sizeListView.bottom;
 }
+
+
+void Finder::Redraw( CRect rect )
+{
+	myListView.RedrawWindow( rect );
+	SetDialogSize( rect );
+}

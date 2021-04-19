@@ -45,6 +45,9 @@
     <ClInclude Include="..\rec\resource2.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="resource3.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="..\rec\Lab1_WTL.ico">
@@ -65,6 +68,9 @@
       <Filter>Resource Files</Filter>
     </ResourceCompile>
     <ResourceCompile Include="..\rec\ToolBar.rc">
+      <Filter>Resource Files</Filter>
+    </ResourceCompile>
+    <ResourceCompile Include="ResizibleDialog.rc">
       <Filter>Resource Files</Filter>
     </ResourceCompile>
   </ItemGroup>

@@ -29,6 +29,7 @@
     <ClInclude Include="..\src\resource1.h" />
     <ClInclude Include="..\src\resource2.h" />
     <ClInclude Include="..\src\targetver.h" />
+    <ClInclude Include="resource3.h" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="..\rec\Lab1_WTL.ico" />
@@ -39,6 +40,7 @@
     <ResourceCompile Include="..\rec\Lab1_WTL.rc" />
     <ResourceCompile Include="..\rec\MyDialog.rc" />
     <ResourceCompile Include="..\rec\ToolBar.rc" />
+    <ResourceCompile Include="ResizibleDialog.rc" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\Finder.cpp" />

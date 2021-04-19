@@ -17,12 +17,19 @@ public:
 
 	BEGIN_MSG_MAP( MyDialogBar )
 		MESSAGE_HANDLER( WM_INITDIALOG, OnInitDialog )
+		MESSAGE_HANDLER(WM_SIZE,OnSize)
 		MESSAGE_HANDLER( WM_COMMAND, OnCommand )
 		NOTIFY_CODE_HANDLER( NM_CLICK, OnItemClick )
 		NOTIFY_CODE_HANDLER( LVN_COLUMNCLICK, OnColumn )
 		MESSAGE_HANDLER( WM_CLOSE, OnCloseCmd )
 	END_MSG_MAP()
-
+	LRESULT OnSize( UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled )
+	{
+		CRect rect;
+		GetClientRect( &rect );
+		myListView.Redraw(rect);
+		return 0;
+	}
 	LRESULT OnColumn( int n, LPNMHDR pnmh, BOOL& )
 	{
 		//myListView.m_hWnd = this->m_hWnd;
