@@ -73,8 +73,6 @@ public:
 		ImageInfo.iItem = lpItem->iItem;
 		ImageInfo.mask = LVIF_PARAM | LVIF_TEXT;
 		fileName.SetString(reinterpret_cast<LPCWSTR>(myListView.GetItemData( lpItem->iItem )));
-		//myListView.GetItemData( lpItem->iItem );
-
 		CString text;
 		text = std::get<1>( myListView.Split( fileName ) );
 

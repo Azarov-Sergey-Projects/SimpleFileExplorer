@@ -1,6 +1,7 @@
 // Microsoft Visual C++ generated resource script.
 //
-#include "D:\Labs_NIX\Lab1_WTL\src\resource2.h"
+//#include "D:\Labs_NIX\Lab1_WTL\src\resource2.h"
+#include "..\src\resource2.h"
 
 #define APSTUDIO_READONLY_SYMBOLS
 /////////////////////////////////////////////////////////////////////////////
