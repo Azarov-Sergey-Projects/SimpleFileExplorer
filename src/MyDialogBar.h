@@ -41,7 +41,7 @@ public:
 				OnCloseCmd( uMsg, wParam, lParam, bHandled );
 				return 0;
 			case IDC_BUTTON_APPLY:
-				ListView_DeleteAllItems( this->myListView.m_hWnd );
+				ListView_DeleteAllItems(myListView.GetHWND());
 				GetDlgItemTextW( IDC_SEARCH_TEXT_BAR, FilePath );
 				if( FilePath.IsEmpty() )
 				{
@@ -67,16 +67,16 @@ public:
 
 	LRESULT OnItemClick( int, LPNMHDR pnmh, BOOL& )
 	{
-		//myListView.m_hWnd = m_hWnd;
-		myListView.Attach( m_hWnd );
+		CString fileName;
+		LPNMITEMACTIVATE lpItem = ( LPNMITEMACTIVATE )pnmh;
 		LVITEM ImageInfo{};
-		ImageInfo.iItem = ListView_GetNextItem( myListView.m_hWnd, -1, LVNI_SELECTED );
+		ImageInfo.iItem = lpItem->iItem;
 		ImageInfo.mask = LVIF_PARAM | LVIF_TEXT;
+		fileName.SetString(reinterpret_cast<LPCWSTR>(myListView.GetItemData( lpItem->iItem )));
+		//myListView.GetItemData( lpItem->iItem );
 
-		myListView.GetSelectedItem( &ImageInfo );
-		//myListView.GetItem(&ImageInfo);
 		CString text;
-		text = std::get<1>( myListView.Split( ImageInfo.pszText ) );
+		text = std::get<1>( myListView.Split( fileName ) );
 
 		if( text.GetString() == TEXT( ".bmp" ) || text.GetString() == TEXT( ".jpeg" ) )
 		{
@@ -86,7 +86,7 @@ public:
 		}
 		else
 		{
-			//MessageBox(TEXT("I am here"), TEXT("Here"));
+			//MessageBox(TEXT("I am here ELSE"), TEXT("Here"));
 			return 0;
 		}
 		return 0;

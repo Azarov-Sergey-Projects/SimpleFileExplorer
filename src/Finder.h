@@ -10,7 +10,7 @@
 #include <tuple>
 
 #include "resource2.h"
-class Finder : public CListViewCtrl
+class Finder 
 {
 public:
   /*  static int CALLBACK CompareProc( LPARAM lParam1, LPARAM lParam2, LPARAM lParamSort )
@@ -27,8 +27,17 @@ public:
     void view_List( CString buf, int i, CString path );
     BOOL initListViewImage( int size, CString path );
     std::tuple<CString, CString> Split( CString buf );
+    HWND GetHWND()const
+    {
+        return my_hWnd;
+    }
+    DWORD_PTR GetItemData( INT nItem )const
+    {
+        return myListView.GetItemData( nItem );
+    }
 private:
     LVITEM lvItem;
     CListViewCtrl myListView;
     CString path;
+    HWND my_hWnd;
 };

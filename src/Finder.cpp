@@ -2,7 +2,7 @@
 void Finder::create( HWND m_hWnd )
 {
 	CRect myRect{ 0,0,600,400 };
-	myListView.Create( m_hWnd, myRect, NULL, WS_CHILD | WS_VISIBLE |
+	my_hWnd=myListView.Create( m_hWnd, myRect, NULL, WS_CHILD | WS_VISIBLE |
 					   WS_CLIPSIBLINGS | WS_CLIPCHILDREN |
 					   LVS_REPORT | LVS_AUTOARRANGE | 
 					   LVS_SHOWSELALWAYS | LVS_SHAREIMAGELISTS );
@@ -21,13 +21,13 @@ void Finder::findFile( CString szPath )
 	BOOL bFlag = F.FindFile( S );
 	if( !bFlag )
 	{
-		MessageBox( TEXT( "Error" ), TEXT( "File not found" ), 0 );
+		MessageBox(my_hWnd, TEXT( "Error" ), TEXT( "File not found" ), 0 );
 	}
 	else
 	{
 		do
 		{
-			if( F.IsDots() == TRUE )
+			if( F.IsDots() )
 			{
 				continue;
 			}
@@ -104,7 +104,7 @@ BOOL Finder::initListViewImage( int size, CString path )
 	bool hFind = F.FindFile( path );
 	if( !hFind )
 	{
-		MessageBox( TEXT( "Error" ), TEXT( "File not found" ), MB_OK | MB_ICONWARNING );
+		MessageBox(my_hWnd, TEXT( "Error" ), TEXT( "File not found" ), MB_OK | MB_ICONWARNING );
 	}
 	else
 	{
