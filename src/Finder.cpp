@@ -1,16 +1,18 @@
 #include "Finder.h"
-void Finder::Create( HWND m_hWnd )
+void Finder::create( HWND m_hWnd )
 {
 	CRect myRect{ 0,0,600,400 };
-	myListView.Create( m_hWnd, myRect, NULL, WS_CHILD | WS_VISIBLE | WS_CLIPSIBLINGS | WS_CLIPCHILDREN |
-					   LVS_REPORT | LVS_AUTOARRANGE | LVS_SHOWSELALWAYS | LVS_SHAREIMAGELISTS );
+	myListView.Create( m_hWnd, myRect, NULL, WS_CHILD | WS_VISIBLE |
+					   WS_CLIPSIBLINGS | WS_CLIPCHILDREN |
+					   LVS_REPORT | LVS_AUTOARRANGE | 
+					   LVS_SHOWSELALWAYS | LVS_SHAREIMAGELISTS );
 	myListView.InsertColumn( 0, TEXT( "Название" ), LVCFMT_LEFT, 290 );
 	myListView.InsertColumn( 1, TEXT( ".*" ), LVCFMT_LEFT, 50 );
 	myListView.InsertColumn( 2, TEXT( "Полный путь" ), LVCFMT_LEFT, 290 );
 }
 
 
-void Finder::FindFile( CString szPath )
+void Finder::findFile( CString szPath )
 {
 	HIMAGELIST hSmall{};
 	CFindFile F;
@@ -33,24 +35,24 @@ void Finder::FindFile( CString szPath )
 			{
 				if( F.IsDirectory() == TRUE )
 				{
-					View_List( F.GetFileName(), i, F.GetFilePath() );
+					view_List( F.GetFileName(), i, F.GetFilePath() );
 					i++;
-					FindFile( F.GetFilePath() );
+					findFile( F.GetFilePath() );
 
 				}
 				else
 				{
-					View_List( F.GetFileName(), i, F.GetFilePath() );
+					view_List( F.GetFileName(), i, F.GetFilePath() );
 					i++;
 				}
 			}
 		} while( F.FindNextFileW() );
 		F.Close();
-		InitListViewImage( myListView.GetItemCount(), S );
+		initListViewImage( myListView.GetItemCount(), S );
 	}
 }
 
-void Finder::View_List( CString name, int i, CString path )
+void Finder::view_List( CString name, int i, CString path )
 {
 	CString nameWithoutEx = std::get<0>( Split( name ) );
 	CString extention = std::get<1>( Split( name ) );
@@ -91,7 +93,7 @@ std::tuple<CString, CString> Finder::Split( CString buf )
 }
 
 
-BOOL Finder::InitListViewImage( int size, CString path )
+BOOL Finder::initListViewImage( int size, CString path )
 {
 	CFindFile F;
 	HIMAGELIST hSmall;

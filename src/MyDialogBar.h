@@ -53,11 +53,11 @@ public:
 					if( FindThread.joinable() )
 					{
 						FindThread.join();
-						FindThread = std::thread( ( &Finder::FindFile ), this->myListView, FilePath );
+						FindThread = std::thread( ( &Finder::findFile ), this->myListView, FilePath );
 					}
 					else
 					{
-						FindThread = std::thread( ( &Finder::FindFile ), this->myListView, FilePath );
+						FindThread = std::thread( ( &Finder::findFile ), this->myListView, FilePath );
 					}
 				}
 				return 0;
@@ -95,7 +95,7 @@ public:
 
 	LRESULT OnInitDialog( UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/ )
 	{
-		myListView.Create( m_hWnd );
+		myListView.create( m_hWnd );
 		return 0;
 	}
 

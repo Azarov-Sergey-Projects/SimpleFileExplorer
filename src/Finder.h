@@ -12,10 +12,6 @@
 #include "resource2.h"
 class Finder : public CListViewCtrl
 {
-private:
-    LVITEM lvItem;
-    CListViewCtrl myListView;
-    CString path;
 public:
   /*  static int CALLBACK CompareProc( LPARAM lParam1, LPARAM lParam2, LPARAM lParamSort )
     {
@@ -26,9 +22,13 @@ public:
         pListCtrl->GetItemText( lParam2, 0, strItem2 );
         return wcscmp( strItem2.GetString(), strItem1.GetString() );
     }*/
-    void Create( HWND m_hWnd );
-    void FindFile( CString szPath );
-    void View_List( CString buf, int i, CString path );
-    BOOL InitListViewImage( int size, CString path );
+    void create( HWND m_hWnd );
+    void findFile ( CString szPath );
+    void view_List( CString buf, int i, CString path );
+    BOOL initListViewImage( int size, CString path );
     std::tuple<CString, CString> Split( CString buf );
+private:
+    LVITEM lvItem;
+    CListViewCtrl myListView;
+    CString path;
 };
