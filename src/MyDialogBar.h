@@ -67,9 +67,9 @@ public:
 
 	LRESULT OnItemClick( int, LPNMHDR pnmh, BOOL& )
 	{
-		CRect myRect{ 605,0,1000,1000 };
+		CRect myRect{ 605,1,0,0 };
 		CStatic imageFile;
-		imageFile.Create( this->m_hWnd,myRect,NULL, WS_CHILD | WS_VISIBLE|SS_BLACKRECT|SS_BITMAP,NULL,1,pnmh );
+		imageFile.Create( this->m_hWnd,myRect,NULL, WS_CHILD | WS_VISIBLE|SS_BITMAP,NULL,1,pnmh );
 		CString fileName;
 		LPNMITEMACTIVATE lpItem = reinterpret_cast< LPNMITEMACTIVATE >( pnmh );
 		myListView.GetItemText( lpItem->iItem, 1, fileName );//получаю имя файла с расширением
@@ -79,13 +79,14 @@ public:
 		if( text == TEXT( ".bmp" ) || text == TEXT( ".jpg" ) )
 		{
 			myListView.GetItemText( lpItem->iItem, 2, fileName );//получаю путь к файлу файла
-			HBITMAP Image = reinterpret_cast< HBITMAP >( LoadImageW( NULL, fileName.GetString(), IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE ) );
+			HBITMAP Image = reinterpret_cast< HBITMAP >( LoadImageW( NULL, fileName.GetString(), IMAGE_BITMAP, 430, 430, LR_LOADFROMFILE ) );
 			imageFile.SetBitmap( Image );
 			return 0;
 		}
 		else
 		{
-			MessageBox(TEXT("I am here ELSE"), TEXT("Here"));
+			//imageFile.DestroyWindow();
+			imageFile.RedrawWindow();
 			return 0;
 		}
 		return 0;
