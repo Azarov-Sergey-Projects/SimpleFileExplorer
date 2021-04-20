@@ -36,8 +36,11 @@ public:
     INT xGetImageSize()const;
     INT yGetImageSize()const;
     void Redraw(CRect rect);
-
+    void SetColumnSizes();
 private:
+    INT nameColumnSize;
+    INT extentionColumnSize;
+    INT pathColumnSize;
     LVITEM lvItem;
     CListViewCtrl myListView;
     CString path;
