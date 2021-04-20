@@ -13,15 +13,6 @@
 class Finder 
 {
 public:
-  /*  static int CALLBACK CompareProc( LPARAM lParam1, LPARAM lParam2, LPARAM lParamSort )
-    {
-        CListViewCtrl* pListCtrl = ( CListViewCtrl* )lParamSort;
-        CString    strItem1;
-        pListCtrl->GetItemText( lParam1, 0, strItem1 );
-        CString    strItem2;
-        pListCtrl->GetItemText( lParam2, 0, strItem2 );
-        return wcscmp( strItem2.GetString(), strItem1.GetString() );
-    }*/
     void create( HWND m_hWnd );
     void findFile ( CString szPath );
     void view_List( CString buf, int i, CString path );
@@ -30,13 +21,11 @@ public:
     HWND GetHWND()const;
     BOOL GetItemText( INT nItem, int nSub, CString& pszText )const;
     void SetDialogSize( CRect rect );
-    void SetListViewSize();
-    void SetImagePreViewSize();
     CRect GetImagePreViewSize()const;
     INT xGetImageSize()const;
     INT yGetImageSize()const;
     void Redraw(CRect rect);
-    void SetColumnSizes();
+    void SortByName();
 private:
     INT nameColumnSize;
     INT extentionColumnSize;
@@ -48,4 +37,7 @@ private:
     CRect sizeListView;
     CRect sizeImagePreView;
     HWND my_hWnd;
+    void SetListViewSize();
+    void SetImagePreViewSize();
+    void SetColumnSizes();
 };

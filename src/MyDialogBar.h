@@ -7,6 +7,8 @@
 #include "resource2.h"
 #include "Finder.h"
 
+
+#define IDC_SEARCH_BAR_1 1500
 class MyDialogBar :public CDialogImpl<MyDialogBar>
 {
 public:
@@ -23,13 +25,22 @@ public:
 		NOTIFY_CODE_HANDLER( LVN_COLUMNCLICK, OnColumn )
 		MESSAGE_HANDLER( WM_CLOSE, OnCloseCmd )
 	END_MSG_MAP()
+
 	LRESULT OnSize( UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled )
 	{
 		CRect rect;
 		GetClientRect( &rect );
 		myListView.Redraw(rect);
+		Apply.SetWindowPos( HWND_TOP,rect.right-250,rect.bottom-50,50,50, NULL );
+		Exit.SetWindowPos( HWND_TOP, rect.right - 50, rect.bottom - 50, 50, 50, NULL );
+		Apply.RedrawWindow();
+		Exit.RedrawWindow();
+		SearchBar.SetWindowPos( HWND_TOP,rect.left+rect.right/6 ,rect.bottom-30 ,rect.left+rect.right/3 ,rect.bottom-30 , NULL );
+		SearchBar.RedrawWindow();
+		GetDlgItem( IDC_STATIC ).SetWindowPos( HWND_BOTTOM, rect.left, rect.bottom - 30, 100, 50, NULL );
 		return 0;
 	}
+
 	LRESULT OnColumn( int n, LPNMHDR pnmh, BOOL& )
 	{
 		//myListView.m_hWnd = this->m_hWnd;
@@ -74,7 +85,6 @@ public:
 
 	LRESULT OnItemClick( int, LPNMHDR pnmh, BOOL& )
 	{
-		//CRect myRect{ 605,1,0,0 };
 		CStatic imageFile;
 		imageFile.Create( this->m_hWnd,static_cast<ATL::_U_RECT>(myListView.GetImagePreViewSize()),NULL, WS_CHILD | WS_VISIBLE|SS_BITMAP,NULL,1,pnmh );
 		CString fileName;
@@ -102,13 +112,27 @@ public:
 		return 0;
 	}
 
-
 	LRESULT OnInitDialog( UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/ )
 	{
+		
 		CRect dialogRect;
 		GetClientRect( &dialogRect );
 		myListView.SetDialogSize( dialogRect );
 		myListView.create( m_hWnd );
+		CRect sizeButtonApply = dialogRect;
+		sizeButtonApply.right -= 200;
+		sizeButtonApply.top =sizeButtonApply.bottom- 50;
+		sizeButtonApply.left =dialogRect.right- 250;
+		Apply.Create( this->m_hWnd, sizeButtonApply, _T( "Apply" ), WS_CHILD |
+					  WS_VISIBLE, NULL, IDC_BUTTON_APPLY );
+		sizeButtonApply.right += 200;
+		sizeButtonApply.left += 200;
+		Exit.Create( this->m_hWnd, sizeButtonApply, _T( "Exit" ), WS_CHILD |
+					  WS_VISIBLE, NULL, IDC_BUTTON_EXIT );
+		sizeButtonApply.right =dialogRect.right-dialogRect.right/2;
+		sizeButtonApply.left=dialogRect.left+200;
+		sizeButtonApply.top = dialogRect.top + 500;
+		SearchBar.Create( this->m_hWnd, sizeButtonApply, NULL, ES_MULTILINE | WS_CHILD | WS_VISIBLE | WS_TABSTOP | WS_BORDER,NULL,  IDC_SEARCH_TEXT_BAR );
 		return 0;
 	}
 
@@ -128,4 +152,7 @@ private:
 	CString FilePath;
 	Finder myListView;
 	std::thread FindThread;
+	CButton Apply;
+	CButton Exit;
+	CEdit SearchBar;
 };

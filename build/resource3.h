@@ -2,7 +2,6 @@
 // Microsoft Visual C++ generated include file.
 // Used by ResizibleDialog.rc
 //
-#define IDD_DIALOGBAR                   103
 
 // Next default values for new objects
 // 

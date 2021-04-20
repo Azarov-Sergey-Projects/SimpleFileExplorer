@@ -1,15 +1,15 @@
 #include "Finder.h"
 void Finder::create( HWND m_hWnd )
 {
-	my_hWnd = myListView.Create( m_hWnd, sizeListView, NULL, WS_CHILD | WS_VISIBLE | WS_VSCROLL | WS_SIZEBOX|
-					   WS_CLIPSIBLINGS | WS_CLIPCHILDREN |
-					   LVS_REPORT | LVS_AUTOARRANGE | DS_ABSALIGN|
-					   LVS_SHOWSELALWAYS | LVS_SHAREIMAGELISTS );
+	my_hWnd = myListView.Create( m_hWnd, sizeListView, NULL, WS_CHILD | WS_VISIBLE | WS_VSCROLL |
+								 WS_SIZEBOX | WS_CLIPSIBLINGS | WS_CLIPCHILDREN |
+								 LVS_REPORT | LVS_AUTOARRANGE | DS_ABSALIGN |
+								 LVS_SHOWSELALWAYS | LVS_SHAREIMAGELISTS );
+	
 	myListView.InsertColumn( 0, TEXT( "Название" ), LVCFMT_LEFT, nameColumnSize );
 	myListView.InsertColumn( 1, TEXT( ".*" ), LVCFMT_LEFT, extentionColumnSize );
 	myListView.InsertColumn( 2, TEXT( "Полный путь" ), LVCFMT_LEFT, pathColumnSize );
 }
-
 
 void Finder::findFile( CString szPath )
 {
@@ -174,8 +174,8 @@ INT Finder::yGetImageSize()const
 
 void Finder::Redraw( CRect rect )
 {
-	myListView.RedrawWindow( rect );
 	SetDialogSize( rect );
+	myListView.SetWindowPos( HWND_BOTTOM, sizeListView, NULL );
 }
 
 void Finder::SetColumnSizes()
@@ -183,4 +183,14 @@ void Finder::SetColumnSizes()
 	 nameColumnSize = sizeListView.right / 3;
 	 extentionColumnSize =  50;
 	 pathColumnSize = sizeListView.right - nameColumnSize - extentionColumnSize;
+}
+
+
+void Finder::SortByName()
+{
+
+	for( int i = 0; i < myListView.GetItemCount(); ++i )
+	{
+		
+	}
 }
