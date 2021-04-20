@@ -28,13 +28,18 @@ public:
 
 	LRESULT OnSize( UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled )
 	{
-		if( imageFile )
-		{
-			imageFile.DestroyWindow();
-		}
 		CRect rect;
 		GetClientRect( &rect );
 		myListView.Redraw(rect);
+		if( imageFile )
+		{
+			imageFile.DestroyWindow();
+			imageFile.Create( this->m_hWnd,static_cast<ATL::_U_RECT>(myListView.GetImagePreViewSize()),NULL, WS_CHILD | WS_VISIBLE|SS_BITMAP,NULL,1,NULL);
+			Image = reinterpret_cast< HBITMAP >( LoadImageW( NULL, fileName.GetString(), IMAGE_BITMAP, 
+															 myListView.xGetImageSize(), myListView.yGetImageSize(),
+															 LR_LOADFROMFILE ) );
+			imageFile.SetBitmap( Image );
+		}
 		GetDlgItem( IDC_SEARCH_TEXT ).SetWindowPos( HWND_BOTTOM, rect.left, rect.bottom - 30, rect.right/8, rect.bottom/10, NULL );
 		GetDlgItem( IDC_SEARCH_TEXT_BAR ).SetWindowPos( HWND_BOTTOM, rect.left + rect.right / 8, rect.bottom - 30, rect.right / 4, rect.bottom - 30, NULL );
 		GetDlgItem( IDC_BUTTON_APPLY ).SetWindowPos( HWND_BOTTOM, rect.right-rect.right/8, rect.bottom - 30, 50, 30,NULL );
@@ -91,7 +96,6 @@ public:
 		{
 			imageFile.Create( this->m_hWnd,static_cast<ATL::_U_RECT>(myListView.GetImagePreViewSize()),NULL, WS_CHILD | WS_VISIBLE|SS_BITMAP,NULL,1,NULL);
 		}
-		CString fileName;
 		LPNMITEMACTIVATE lpItem = reinterpret_cast< LPNMITEMACTIVATE >( pnmh );
 		myListView.GetItemText( lpItem->iItem, 1, fileName );//получаю имя файла с расширением
 		CString text;
@@ -101,7 +105,7 @@ public:
 		{
 			
 			myListView.GetItemText( lpItem->iItem, 2, fileName );//получаю путь к файлу файла
-			HBITMAP Image = reinterpret_cast< HBITMAP >( LoadImageW( NULL, fileName.GetString(), IMAGE_BITMAP, 
+			Image = reinterpret_cast< HBITMAP >( LoadImageW( NULL, fileName.GetString(), IMAGE_BITMAP, 
 																	 myListView.xGetImageSize(), myListView.yGetImageSize(),
 																	 LR_LOADFROMFILE ) );
 			imageFile.SetBitmap( Image );
@@ -138,7 +142,9 @@ public:
 private:
 	std::atomic <BOOL> atom=false;
 	CString FilePath;
+	CString fileName;
 	Finder myListView;
 	std::thread FindThread;
 	CStatic imageFile;
+	HBITMAP Image;
 };
