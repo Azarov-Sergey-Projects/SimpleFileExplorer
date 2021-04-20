@@ -28,16 +28,18 @@ public:
 
 	LRESULT OnSize( UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled )
 	{
+		if( imageFile )
+		{
+			imageFile.DestroyWindow();
+		}
 		CRect rect;
 		GetClientRect( &rect );
 		myListView.Redraw(rect);
-		Apply.SetWindowPos( HWND_TOP,rect.right-250,rect.bottom-50,50,50, NULL );
-		Exit.SetWindowPos( HWND_TOP, rect.right - 50, rect.bottom - 50, 50, 50, NULL );
-		Apply.RedrawWindow();
-		Exit.RedrawWindow();
-		SearchBar.SetWindowPos( HWND_TOP,rect.left+rect.right/6 ,rect.bottom-30 ,rect.left+rect.right/3 ,rect.bottom-30 , NULL );
-		SearchBar.RedrawWindow();
-		GetDlgItem( IDC_STATIC ).SetWindowPos( HWND_BOTTOM, rect.left, rect.bottom - 30, 100, 50, NULL );
+		GetDlgItem( IDC_SEARCH_TEXT ).SetWindowPos( HWND_BOTTOM, rect.left, rect.bottom - 30, rect.right/8, rect.bottom/10, NULL );
+		GetDlgItem( IDC_SEARCH_TEXT_BAR ).SetWindowPos( HWND_BOTTOM, rect.left + rect.right / 8, rect.bottom - 30, rect.right / 4, rect.bottom - 30, NULL );
+		GetDlgItem( IDC_BUTTON_APPLY ).SetWindowPos( HWND_BOTTOM, rect.right-rect.right/8, rect.bottom - 30, 50, 30,NULL );
+		GetDlgItem( IDC_BUTTON_EXIT ).SetWindowPos( HWND_BOTTOM, rect.right - rect.right / 20, rect.bottom - 30, 50, 30, NULL );
+		
 		return 0;
 	}
 
@@ -85,8 +87,10 @@ public:
 
 	LRESULT OnItemClick( int, LPNMHDR pnmh, BOOL& )
 	{
-		CStatic imageFile;
-		imageFile.Create( this->m_hWnd,static_cast<ATL::_U_RECT>(myListView.GetImagePreViewSize()),NULL, WS_CHILD | WS_VISIBLE|SS_BITMAP,NULL,1,pnmh );
+		if( !imageFile )
+		{
+			imageFile.Create( this->m_hWnd,static_cast<ATL::_U_RECT>(myListView.GetImagePreViewSize()),NULL, WS_CHILD | WS_VISIBLE|SS_BITMAP,NULL,1,NULL);
+		}
 		CString fileName;
 		LPNMITEMACTIVATE lpItem = reinterpret_cast< LPNMITEMACTIVATE >( pnmh );
 		myListView.GetItemText( lpItem->iItem, 1, fileName );//получаю имя файла с расширением
@@ -95,6 +99,7 @@ public:
 
 		if( text == TEXT( ".bmp" ) )
 		{
+			
 			myListView.GetItemText( lpItem->iItem, 2, fileName );//получаю путь к файлу файла
 			HBITMAP Image = reinterpret_cast< HBITMAP >( LoadImageW( NULL, fileName.GetString(), IMAGE_BITMAP, 
 																	 myListView.xGetImageSize(), myListView.yGetImageSize(),
@@ -104,9 +109,6 @@ public:
 		}
 		else
 		{
-			//imageFile.DestroyWindow();
-			imageFile.RedrawWindow();
-			imageFile.DestroyWindow();
 			return 0;
 		}
 		return 0;
@@ -114,25 +116,11 @@ public:
 
 	LRESULT OnInitDialog( UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/ )
 	{
-		
 		CRect dialogRect;
 		GetClientRect( &dialogRect );
 		myListView.SetDialogSize( dialogRect );
 		myListView.create( m_hWnd );
-		CRect sizeButtonApply = dialogRect;
-		sizeButtonApply.right -= 200;
-		sizeButtonApply.top =sizeButtonApply.bottom- 50;
-		sizeButtonApply.left =dialogRect.right- 250;
-		Apply.Create( this->m_hWnd, sizeButtonApply, _T( "Apply" ), WS_CHILD |
-					  WS_VISIBLE, NULL, IDC_BUTTON_APPLY );
-		sizeButtonApply.right += 200;
-		sizeButtonApply.left += 200;
-		Exit.Create( this->m_hWnd, sizeButtonApply, _T( "Exit" ), WS_CHILD |
-					  WS_VISIBLE, NULL, IDC_BUTTON_EXIT );
-		sizeButtonApply.right =dialogRect.right-dialogRect.right/2;
-		sizeButtonApply.left=dialogRect.left+200;
-		sizeButtonApply.top = dialogRect.top + 500;
-		SearchBar.Create( this->m_hWnd, sizeButtonApply, NULL, ES_MULTILINE | WS_CHILD | WS_VISIBLE | WS_TABSTOP | WS_BORDER,NULL,  IDC_SEARCH_TEXT_BAR );
+		imageFile.Create( this->m_hWnd,static_cast<ATL::_U_RECT>(myListView.GetImagePreViewSize()),NULL, WS_CHILD | WS_VISIBLE|SS_BITMAP,NULL,1,NULL);
 		return 0;
 	}
 
@@ -152,7 +140,5 @@ private:
 	CString FilePath;
 	Finder myListView;
 	std::thread FindThread;
-	CButton Apply;
-	CButton Exit;
-	CEdit SearchBar;
+	CStatic imageFile;
 };

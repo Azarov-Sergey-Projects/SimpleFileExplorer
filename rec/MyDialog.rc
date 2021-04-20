@@ -55,7 +55,6 @@ GUIDELINES DESIGNINFO
 BEGIN
     IDD_MYDIALOGBAR, DIALOG
     BEGIN
-        RIGHTMARGIN, 742
         BOTTOMMARGIN, 326
     END
 END
@@ -73,7 +72,10 @@ EXSTYLE WS_EX_OVERLAPPEDWINDOW
 CAPTION "ƒиалоговое окно поиска файлов"
 FONT 8, "MS Shell Dlg", 400, 0, 0x0
 BEGIN
-    LTEXT           "¬ведите нужную директорию",IDC_STATIC,5,318,120,8
+    LTEXT           "¬ведите нужную директорию",IDC_SEARCH_TEXT,5,318,120,8
+    PUSHBUTTON      "Apply",IDC_BUTTON_APPLY,583,312,50,14
+    PUSHBUTTON      "Exit",IDC_BUTTON_EXIT,694,312,50,14
+    EDITTEXT        IDC_SEARCH_TEXT_BAR,135,312,208,14,ES_AUTOHSCROLL
 END
 
 
@@ -84,7 +86,11 @@ END
 
 IDD_MYDIALOGBAR AFX_DIALOG_LAYOUT
 BEGIN
-    0
+    0,
+    0, 0, 0, 0,
+    0, 0, 0, 0,
+    100, 100, 0, 0,
+    0, 0, 0, 0
 END
 
 #endif    // Russian (Russia) resources

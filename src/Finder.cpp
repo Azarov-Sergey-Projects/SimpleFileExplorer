@@ -1,4 +1,5 @@
 #include "Finder.h"
+
 void Finder::create( HWND m_hWnd )
 {
 	my_hWnd = myListView.Create( m_hWnd, sizeListView, NULL, WS_CHILD | WS_VISIBLE | WS_VSCROLL |
@@ -153,7 +154,7 @@ void Finder::SetImagePreViewSize()
 {
 	sizeImagePreView.top = sizeListView.top;
 	sizeImagePreView.left = sizeListView.right;
-	sizeImagePreView.bottom = sizeListView.bottom;
+	sizeImagePreView.bottom = sizeDialogBox.bottom-sizeDialogBox.bottom/8;
 	sizeImagePreView.right = sizeDialogBox.right;
 }
 
