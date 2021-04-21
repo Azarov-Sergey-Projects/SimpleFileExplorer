@@ -8,7 +8,6 @@
 #include "Finder.h"
 
 
-#define IDC_SEARCH_BAR_1 1500
 class MyDialogBar :public CDialogImpl<MyDialogBar>
 {
 public:
@@ -50,8 +49,7 @@ public:
 
 	LRESULT OnColumn( int n, LPNMHDR pnmh, BOOL& )
 	{
-		//ListView_SortItems( myListView.GetHWND(), LVM_SORTITEMS, pnmh );
-		MessageBox( TEXT( "I am here" ), TEXT( "Here" ), NULL );
+		
 		return 0;
 	}
 
@@ -64,7 +62,7 @@ public:
 				OnCloseCmd( uMsg, wParam, lParam, bHandled );
 				return 0;
 			case IDC_BUTTON_APPLY:
-				int i = 0;
+				//int i = 0;
 				ListView_DeleteAllItems(myListView.GetHWND());
 				GetDlgItemTextW( IDC_SEARCH_TEXT_BAR, FilePath );
 				if( FilePath.IsEmpty() )
@@ -77,11 +75,11 @@ public:
 					if( FindThread.joinable() )
 					{
 						FindThread.join();
-						FindThread = std::thread( ( &Finder::findFile ), this->myListView, FilePath );
+						FindThread = std::thread( ( &Finder::findFile ), this->myListView, FilePath, i );
 					}
 					else
 					{
-						FindThread = std::thread( ( &Finder::findFile ), this->myListView, FilePath );
+						FindThread = std::thread( ( &Finder::findFile ), this->myListView, FilePath,i );
 					}
 				}
 				return 0;
@@ -147,4 +145,5 @@ private:
 	std::thread FindThread;
 	CStatic imageFile;
 	HBITMAP Image;
+	int i = 0;
 };

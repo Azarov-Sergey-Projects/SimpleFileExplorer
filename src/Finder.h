@@ -10,11 +10,12 @@
 #include <tuple>
 
 #include "resource2.h"
+
 class Finder 
 {
 public:
     void create( HWND m_hWnd );
-    void findFile( CString szPath );
+    void findFile( CString szPath,int i );
     std::tuple<CString, CString> Split( CString buf );
     HWND GetHWND()const;
     BOOL GetItemText( INT nItem, int nSub, CString& pszText )const;
@@ -24,8 +25,8 @@ public:
     INT yGetImageSize()const;
     void Redraw(CRect rect);
     void SortByName();
-    
 private:
+    CImageList hSmall;
     INT nameColumnSize;
     INT extentionColumnSize;
     INT pathColumnSize;
