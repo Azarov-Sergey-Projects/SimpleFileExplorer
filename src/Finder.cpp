@@ -14,7 +14,6 @@ void Finder::create( HWND m_hWnd )
 
 void Finder::findFile( CString szPath )
 {
-	HIMAGELIST hSmall{};
 	CFindFile F;
 	CString S = szPath + TEXT( "\\*.*" );
 	int i = 0;
@@ -48,7 +47,7 @@ void Finder::findFile( CString szPath )
 			}
 		} while( F.FindNextFileW() );
 		F.Close();
-		initListViewImage( myListView.GetItemCount(), S );
+		initListViewImage(i, S );
 	}
 }
 
@@ -95,11 +94,11 @@ std::tuple<CString, CString> Finder::Split( CString buf )
 BOOL Finder::initListViewImage( int size, CString path )
 {
 	CFindFile F;
-	HIMAGELIST hSmall;
+	CImageList hSmall;
 	SHFILEINFO lp{};
-	hSmall = ImageList_Create( GetSystemMetrics( SM_CXSMICON ),
-							   GetSystemMetrics( SM_CYSMICON ),
-							   ILC_MASK | ILC_COLOR32, size, 1 );
+	hSmall.Create( GetSystemMetrics( SM_CXSMICON ),
+				   GetSystemMetrics( SM_CYSMICON ),
+				   ILC_MASK | ILC_COLOR32, myListView.GetItemCount(), 1 );
 	bool hFind = F.FindFile( path );
 	if( !hFind )
 	{
@@ -116,7 +115,7 @@ BOOL Finder::initListViewImage( int size, CString path )
 			DWORD num = GetFileAttributesW( F.GetFilePath() );
 			SHGetFileInfoW( F.GetFilePath(), num, &lp, sizeof( lp ),
 							SHGFI_SYSICONINDEX | SHGFI_ICON | SHGFI_USEFILEATTRIBUTES );
-			ImageList_AddIcon( hSmall, lp.hIcon );
+			hSmall.AddIcon( lp.hIcon );
 			DestroyIcon( lp.hIcon );
 		} while( F.FindNextFileW() );
 		F.Close();
@@ -129,6 +128,7 @@ HWND Finder::GetHWND()const
 {
 	return my_hWnd;
 }
+
 BOOL Finder::GetItemText( INT nItem, int nSub,CString& pszText )const
 {
 	return myListView.GetItemText(nItem,nSub,pszText );
@@ -185,7 +185,6 @@ void Finder::SetColumnSizes()
 	 extentionColumnSize =  50;
 	 pathColumnSize = sizeListView.right - nameColumnSize - extentionColumnSize;
 }
-
 
 void Finder::SortByName()
 {

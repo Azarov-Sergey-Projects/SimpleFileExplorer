@@ -50,10 +50,8 @@ public:
 
 	LRESULT OnColumn( int n, LPNMHDR pnmh, BOOL& )
 	{
-		//myListView.m_hWnd = this->m_hWnd;
-		//myListView.SortItems(myListView.CompareProc, (LPARAM)pnmh);
-		//ListView_SortItems(this->m_hWnd, CompareProc, (LPARAM)pnmh);
-	//	MessageBox(TEXT("I am gere"), TEXT("Here"), NULL);
+		//ListView_SortItems( myListView.GetHWND(), LVM_SORTITEMS, pnmh );
+		MessageBox( TEXT( "I am here" ), TEXT( "Here" ), NULL );
 		return 0;
 	}
 
@@ -66,6 +64,7 @@ public:
 				OnCloseCmd( uMsg, wParam, lParam, bHandled );
 				return 0;
 			case IDC_BUTTON_APPLY:
+				int i = 0;
 				ListView_DeleteAllItems(myListView.GetHWND());
 				GetDlgItemTextW( IDC_SEARCH_TEXT_BAR, FilePath );
 				if( FilePath.IsEmpty() )
@@ -105,14 +104,15 @@ public:
 		{
 			
 			myListView.GetItemText( lpItem->iItem, 2, fileName );//получаю путь к файлу файла
-			Image = reinterpret_cast< HBITMAP >( LoadImageW( NULL, fileName.GetString(), IMAGE_BITMAP, 
-																	 myListView.xGetImageSize(), myListView.yGetImageSize(),
-																	 LR_LOADFROMFILE ) );
+			Image = reinterpret_cast< HBITMAP >( LoadImageW( NULL, fileName.GetString(),
+															 IMAGE_BITMAP, myListView.xGetImageSize(),
+															 myListView.yGetImageSize(), LR_LOADFROMFILE ) );
 			imageFile.SetBitmap( Image );
 			return 0;
 		}
 		else
 		{
+			imageFile.DestroyWindow();
 			return 0;
 		}
 		return 0;

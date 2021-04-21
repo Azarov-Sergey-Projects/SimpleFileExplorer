@@ -14,9 +14,7 @@ class Finder
 {
 public:
     void create( HWND m_hWnd );
-    void findFile ( CString szPath );
-    void view_List( CString buf, int i, CString path );
-    BOOL initListViewImage( int size, CString path );
+    void findFile( CString szPath );
     std::tuple<CString, CString> Split( CString buf );
     HWND GetHWND()const;
     BOOL GetItemText( INT nItem, int nSub, CString& pszText )const;
@@ -26,6 +24,7 @@ public:
     INT yGetImageSize()const;
     void Redraw(CRect rect);
     void SortByName();
+    
 private:
     INT nameColumnSize;
     INT extentionColumnSize;
@@ -40,4 +39,7 @@ private:
     void SetListViewSize();
     void SetImagePreViewSize();
     void SetColumnSizes();
+    int CALLBACK CompareFunc( LPARAM lParam1, LPARAM lParam2, LPARAM lParamSort );
+    void view_List( CString buf, int i, CString path );
+    BOOL initListViewImage( int size, CString path );
 };
