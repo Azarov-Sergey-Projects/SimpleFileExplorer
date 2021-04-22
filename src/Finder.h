@@ -7,6 +7,7 @@
 #include <atlfile.h>
 #include <atlstr.h>
 
+
 #include <tuple>
 
 #include "resource2.h"
@@ -42,5 +43,4 @@ private:
     void SetColumnSizes();
     int CALLBACK CompareFunc( LPARAM lParam1, LPARAM lParam2, LPARAM lParamSort );
     void view_List( CString buf, int i, CString path );
-    BOOL initListViewImage( int size, CString path );
 };

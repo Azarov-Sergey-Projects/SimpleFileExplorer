@@ -38,13 +38,26 @@ void Finder::findFile( CString szPath,int i )
 				i++;
 				if( F.IsDirectory() )
 				{
-					findFile( F.GetFilePath(),i );
+					CFindFile G;
+					G.FindFile( F.GetFilePath()+TEXT("\\*.*") );
+					do
+					{
+						if( G.IsDots() )
+						{
+							continue;
+						}
+						view_List( G.GetFileName(), i, G.GetFilePath() );
+						i++;
+					} while( G.FindNextFileW() );
+					G.Close();
 				}
 			}
 		} while( F.FindNextFileW() );
 		F.Close();
 	}
 	myListView.SetImageList( hSmall, 1 );
+	//initListViewImage(S.GetString() );
+	//myListView.SetImageList( hSmall, 1 );
 }
 
 void Finder::view_List( CString name, int i, CString path )
@@ -63,11 +76,11 @@ void Finder::view_List( CString name, int i, CString path )
 	myListView.InsertItem( &lvItem );
 	myListView.SetItemText( i, 1, extention.GetString() );
 	myListView.SetItemText( i, 2, path.GetString() );
+
 	DWORD num = GetFileAttributesW( path.GetString() );
 	SHGetFileInfoW( path.GetString(), num, &lp, sizeof( lp ),
 					SHGFI_SYSICONINDEX | SHGFI_ICON | SHGFI_USEFILEATTRIBUTES );
 	hSmall.AddIcon( lp.hIcon );
-	myListView.SetImageList( hSmall, 1 );
 	DestroyIcon( lp.hIcon );
 }
 
@@ -93,40 +106,6 @@ std::tuple<CString, CString> Finder::Split( CString buf )
 		return { buf.GetString(), tmp.GetString() };
 	}
 }
-
-/*BOOL Finder::initListViewImage( int size, CString path )
-{
-	CFindFile F;
-	//CImageList hSmall;
-	SHFILEINFO lp{};
-	//hSmall.Create( GetSystemMetrics( SM_CXSMICON ),
-				  // GetSystemMetrics( SM_CYSMICON ),
-				  // ILC_MASK | ILC_COLOR32, size, 1 );
-	bool hFind = F.FindFile( path );
-	if( !hFind )
-	{
-		MessageBox(my_hWnd, TEXT( "Error" ), TEXT( "File not found" ), MB_OK | MB_ICONWARNING );
-	}
-	else
-	{
-		do
-		{
-			if( F.IsDots() )
-			{
-				continue;
-			}
-			
-			DWORD num = GetFileAttributesW( F.GetFilePath() );
-			SHGetFileInfoW( F.GetFilePath(), num, &lp, sizeof( lp ),
-							SHGFI_SYSICONINDEX | SHGFI_ICON | SHGFI_USEFILEATTRIBUTES );
-			hSmall.AddIcon( lp.hIcon );
-			DestroyIcon( lp.hIcon );
-		} while( F.FindNextFileW() );
-		F.Close();
-	}
-	myListView.SetImageList( hSmall, 1 );
-	return TRUE;
-}*/
 
 HWND Finder::GetHWND()const
 {
