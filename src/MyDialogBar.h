@@ -49,7 +49,7 @@ public:
 
 	LRESULT OnColumn( int n, LPNMHDR pnmh, BOOL& )
 	{
-		
+		myListView.Sort((LPARAM)pnmh);
 		return 0;
 	}
 
@@ -72,7 +72,7 @@ public:
 				}
 				else
 				{
-					if( FindThread.joinable() )
+					/*if( FindThread.joinable() )
 					{
 						FindThread.join();
 						FindThread = std::thread( ( &Finder::findFile ), this->myListView, FilePath, i );
@@ -80,7 +80,8 @@ public:
 					else
 					{
 						FindThread = std::thread( ( &Finder::findFile ), this->myListView, FilePath,i );
-					}
+					}*/
+					FindThread = std::thread( ( &Finder::findFile ), this->myListView, FilePath, i );
 				}
 				return 0;
 		}

@@ -12,6 +12,12 @@
 
 #include "resource2.h"
 
+
+static int CALLBACK CompareFunc( LPARAM lParam1, LPARAM lParam2, LPARAM lParamSort );
+
+static BOOL bReverse = TRUE;
+
+
 class Finder 
 {
 public:
@@ -25,7 +31,11 @@ public:
     INT xGetImageSize()const;
     INT yGetImageSize()const;
     void Redraw(CRect rect);
-    void SortByName();
+    void Sort( LPARAM func )
+    {
+        bReverse = !bReverse;
+        myListView.SortItemsEx( &CompareFunc, func );
+    }
 private:
     CImageList hSmall;
     INT nameColumnSize;
@@ -41,6 +51,34 @@ private:
     void SetListViewSize();
     void SetImagePreViewSize();
     void SetColumnSizes();
-    int CALLBACK CompareFunc( LPARAM lParam1, LPARAM lParam2, LPARAM lParamSort );
     void view_List( CString buf, int i, CString path );
 };
+
+
+static int CALLBACK CompareFunc( LPARAM lParam1, LPARAM lParam2, LPARAM lParamSort )
+{
+    CListViewCtrl* myListView = ( CListViewCtrl* )lParamSort;
+    CString FirstFile;
+    CString SecondFile;
+    INT iIndex=0;
+    LVFINDINFO ItemInfo;
+
+    ItemInfo.flags=LVFI_PARAM;
+    // копируешь в буфера сравниваемые строки 
+    ItemInfo.lParam=lParam1;
+    iIndex=myListView->FindItem( &ItemInfo, -1 );
+    myListView->GetItemText( iIndex, 0, FirstFile );
+
+    ItemInfo.lParam=lParam2;
+    iIndex = myListView->FindItem( &ItemInfo, -1 );
+    myListView->GetItemText( iIndex, 0, SecondFile );
+    if( bReverse )
+    {
+        return  !(StrCmpW( FirstFile.GetString(), SecondFile.GetString() ));
+    }
+    else
+    {
+        return StrCmpW( SecondFile.GetString(), FirstFile.GetString() );
+    }
+}
+

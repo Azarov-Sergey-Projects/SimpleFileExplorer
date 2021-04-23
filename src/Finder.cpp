@@ -39,7 +39,7 @@ void Finder::findFile( CString szPath,int i )
 				if( F.IsDirectory() )
 				{
 					CFindFile G;
-					G.FindFile( F.GetFilePath()+TEXT("\\*.*") );
+					G.FindFile( F.GetFilePath() + TEXT( "\\*.*" ) );
 					do
 					{
 						if( G.IsDots() )
@@ -76,7 +76,6 @@ void Finder::view_List( CString name, int i, CString path )
 	myListView.InsertItem( &lvItem );
 	myListView.SetItemText( i, 1, extention.GetString() );
 	myListView.SetItemText( i, 2, path.GetString() );
-
 	DWORD num = GetFileAttributesW( path.GetString() );
 	SHGetFileInfoW( path.GetString(), num, &lp, sizeof( lp ),
 					SHGFI_SYSICONINDEX | SHGFI_ICON | SHGFI_USEFILEATTRIBUTES );
@@ -167,9 +166,4 @@ void Finder::SetColumnSizes()
 	 nameColumnSize = sizeListView.right / 3;
 	 extentionColumnSize =  50;
 	 pathColumnSize = sizeListView.right - nameColumnSize - extentionColumnSize;
-}
-
-void Finder::SortByName()
-{
-	//myListView.SortItems
 }
