@@ -167,3 +167,39 @@ void Finder::SetColumnSizes()
 	 extentionColumnSize =  50;
 	 pathColumnSize = sizeListView.right - nameColumnSize - extentionColumnSize;
 }
+
+
+static int CALLBACK CompareFunc( LPARAM lParam1, LPARAM lParam2, LPARAM lParamSort )
+{
+	CListViewCtrl* myListView = reinterpret_cast<CListViewCtrl*>(lParamSort);
+	CString FirstFile;
+	CString SecondFile;
+	INT iIndex=0;
+	LVFINDINFO ItemInfo{};
+	ItemInfo.flags=LVFI_PARAM;
+	// копируешь в буфера сравниваемые строки 
+	ItemInfo.lParam=lParam1;
+	iIndex=myListView->FindItem( &ItemInfo, -1 );
+	myListView->GetItemText( iIndex, myListView->GetSelectedColumn(), FirstFile );
+
+	
+	ItemInfo.lParam=lParam2;
+	iIndex = myListView->FindItem( &ItemInfo, -1 );
+	myListView->GetItemText( iIndex, myListView->GetSelectedColumn(), SecondFile );
+	if( bReverse )
+	{
+		return  !(StrCmpW( FirstFile.GetString(), SecondFile.GetString() ));
+	}
+	else
+	{
+		return StrCmpW( SecondFile.GetString(), FirstFile.GetString() );
+	}
+	delete myListView;
+}
+
+
+void Finder::Sort( LPARAM func )
+{
+	bReverse = !bReverse;
+	myListView.SortItems( &CompareFunc, func );
+}
