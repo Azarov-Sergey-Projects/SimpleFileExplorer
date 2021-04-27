@@ -174,8 +174,8 @@ void Finder::SetColumnSizes()
 	CListViewCtrl* myListView = reinterpret_cast<CListViewCtrl*>(lParamSort);
 	CString FirstFile;
 	CString SecondFile;
-	myListView->GetItemText( static_cast< int >( lParam1 ),0, FirstFile );
-	myListView->GetItemText( static_cast<int>(lParam2),0 , SecondFile );
+	myListView->GetItemText( static_cast< int >( lParam1 ),columnInd, FirstFile );
+	myListView->GetItemText( static_cast<int>(lParam2),columnInd, SecondFile );
 	if( bReverse )
 	{
 		return  StrCmpW( SecondFile.GetString(), FirstFile.GetString() );
@@ -187,14 +187,10 @@ void Finder::SetColumnSizes()
 }
 
 
-void Finder::Sort( LPARAM func )
+void Finder::Sort( LPNMHDR func )
 {
 	bReverse = !bReverse;
-	myListView.SortItemsEx( CompareFunc, func );
-}
-
-
-int Finder::GetSelectedColumn()const
-{
-	return myListView.GetSelectedColumn();
+	LPNMLISTVIEW list = ( LPNMLISTVIEW )func;
+	columnInd = list->iSubItem;
+	myListView.SortItemsEx( &CompareFunc, (LPARAM)func );
 }

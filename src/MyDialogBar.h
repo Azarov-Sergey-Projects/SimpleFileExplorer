@@ -51,8 +51,7 @@ public:
 
 	LRESULT OnColumn( int n, LPNMHDR pnmh, BOOL& )
 	{
-		int i =myListView.GetSelectedColumn();
-		myListView.Sort((LPARAM)pnmh);
+		myListView.Sort(pnmh);
 		return 0;
 	}
 
@@ -141,7 +140,6 @@ public:
 
 
 private:
-	std::atomic <BOOL> atom=false;
 	CString FilePath;
 	CString fileName;
 	Finder myListView;

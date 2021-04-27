@@ -12,9 +12,13 @@
 
 #include "resource2.h"
 
-static int CALLBACK CompareFunc( LPARAM lParam1, LPARAM lParam2, LPARAM lParamSort );
+
+static int columnInd;
+
+int CALLBACK CompareFunc( LPARAM lParam1, LPARAM lParam2, LPARAM lParamSort );
 
 static BOOL bReverse = TRUE;
+
 
 
 class Finder 
@@ -30,9 +34,9 @@ public:
     INT xGetImageSize()const;
     INT yGetImageSize()const;
     void Redraw(CRect rect);
-    void Sort( LPARAM func );
-    int GetSelectedColumn()const;
+    void Sort( LPNMHDR func );
 private:
+    //std::atomic <BOOL> atom=false;
     CImageList hSmall;
     INT nameColumnSize;
     INT extentionColumnSize;
