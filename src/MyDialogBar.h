@@ -1,14 +1,15 @@
 #pragma once
 
 #include <thread>
-#include <atomic>
 #include <Commctrl.h>
 #include "resource.h"
 #include "resource2.h"
 #include "Finder.h"
 
 
+#include <atomic>
 
+static std::atomic_bool StopThread = false;
 
 class MyDialogBar :public CDialogImpl<MyDialogBar>
 {
@@ -75,14 +76,16 @@ public:
 				{
 					if( FindThread.joinable() )
 					{
+						StopThread = TRUE;
 						FindThread.join();
-						FindThread = std::thread( ( &Finder::findFile ), this->myListView, FilePath, i );
+						StopThread = FALSE;
 					}
-					else
+						FindThread = std::thread( ( &Finder::findFile ), this->myListView, FilePath, i );
+					
+					/*else
 					{
 						FindThread = std::thread( ( &Finder::findFile ), this->myListView, FilePath,i );
-					}
-					//FindThread = std::thread( ( &Finder::findFile ), this->myListView, FilePath, i );
+					}*/
 				}
 				return 0;
 		}
@@ -132,6 +135,7 @@ public:
 	{
 		if( FindThread.joinable() )
 		{
+			StopThread = TRUE;
 			FindThread.join();
 		}
 		EndDialog( NULL );

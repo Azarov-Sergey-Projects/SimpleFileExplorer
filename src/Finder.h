@@ -15,6 +15,8 @@
 
 static int columnInd;
 
+
+
 int CALLBACK CompareFunc( LPARAM lParam1, LPARAM lParam2, LPARAM lParamSort );
 
 static BOOL bReverse = TRUE;
@@ -35,8 +37,8 @@ public:
     INT yGetImageSize()const;
     void Redraw(CRect rect);
     void Sort( LPNMHDR func );
+
 private:
-    //std::atomic <BOOL> atom=false;
     CImageList hSmall;
     INT nameColumnSize;
     INT extentionColumnSize;

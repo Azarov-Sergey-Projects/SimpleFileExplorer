@@ -1,5 +1,5 @@
 #include "Finder.h"
-
+#include "MyDialogBar.h"
 void Finder::create( HWND m_hWnd )
 {
 	my_hWnd = myListView.Create( m_hWnd, sizeListView, NULL, WS_CHILD | WS_VISIBLE | WS_VSCROLL |
@@ -26,6 +26,7 @@ void Finder::findFile( CString szPath,int i )
 	}
 	else
 	{
+		
 		do
 		{
 			if( F.IsDots() )
@@ -51,6 +52,10 @@ void Finder::findFile( CString szPath,int i )
 					} while( G.FindNextFileW() );
 					G.Close();
 				}
+			}
+			if( StopThread)
+			{
+				return;
 			}
 		} while( F.FindNextFileW() );
 		F.Close();
