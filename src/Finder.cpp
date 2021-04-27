@@ -7,9 +7,9 @@ void Finder::create( HWND m_hWnd )
 								 LVS_REPORT | LVS_AUTOARRANGE | DS_ABSALIGN |
 								 LVS_SHOWSELALWAYS | LVS_SHAREIMAGELISTS );
 	
-	myListView.InsertColumn( 0, TEXT( "Название" ), LVCFMT_LEFT, nameColumnSize );
-	myListView.InsertColumn( 1, TEXT( ".*" ), LVCFMT_LEFT, extentionColumnSize );
-	myListView.InsertColumn( 2, TEXT( "Полный путь" ), LVCFMT_LEFT, pathColumnSize );
+	myListView.InsertColumn(0, TEXT( "Название" ), LVCFMT_LEFT, nameColumnSize );
+	myListView.InsertColumn(1, TEXT( ".*" ), LVCFMT_LEFT, extentionColumnSize );
+	myListView.InsertColumn(2,  TEXT( "Полный путь" ), LVCFMT_LEFT, pathColumnSize );
 	hSmall.Create( GetSystemMetrics( SM_CXSMICON ),
 				   GetSystemMetrics( SM_CYSMICON ),
 				   ILC_MASK | ILC_COLOR32, 10, 1 );
@@ -169,37 +169,32 @@ void Finder::SetColumnSizes()
 }
 
 
-static int CALLBACK CompareFunc( LPARAM lParam1, LPARAM lParam2, LPARAM lParamSort )
+ int CALLBACK CompareFunc( LPARAM lParam1, LPARAM lParam2, LPARAM lParamSort )
 {
 	CListViewCtrl* myListView = reinterpret_cast<CListViewCtrl*>(lParamSort);
 	CString FirstFile;
 	CString SecondFile;
-	INT iIndex=0;
-	LVFINDINFO ItemInfo{};
-	ItemInfo.flags=LVFI_PARAM;
-	// копируешь в буфера сравниваемые строки 
-	ItemInfo.lParam=lParam1;
-	iIndex=myListView->FindItem( &ItemInfo, -1 );
-	myListView->GetItemText( iIndex, myListView->GetSelectedColumn(), FirstFile );
-
-	
-	ItemInfo.lParam=lParam2;
-	iIndex = myListView->FindItem( &ItemInfo, -1 );
-	myListView->GetItemText( iIndex, myListView->GetSelectedColumn(), SecondFile );
+	myListView->GetItemText( static_cast< int >( lParam1 ),0, FirstFile );
+	myListView->GetItemText( static_cast<int>(lParam2),0 , SecondFile );
 	if( bReverse )
 	{
-		return  !(StrCmpW( FirstFile.GetString(), SecondFile.GetString() ));
+		return  StrCmpW( SecondFile.GetString(), FirstFile.GetString() );
 	}
 	else
 	{
-		return StrCmpW( SecondFile.GetString(), FirstFile.GetString() );
+		return StrCmpW( FirstFile.GetString(),SecondFile.GetString() );
 	}
-	delete myListView;
 }
 
 
 void Finder::Sort( LPARAM func )
 {
 	bReverse = !bReverse;
-	myListView.SortItems( &CompareFunc, func );
+	myListView.SortItemsEx( CompareFunc, func );
+}
+
+
+int Finder::GetSelectedColumn()const
+{
+	return myListView.GetSelectedColumn();
 }

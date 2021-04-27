@@ -12,7 +12,6 @@
 
 #include "resource2.h"
 
-
 static int CALLBACK CompareFunc( LPARAM lParam1, LPARAM lParam2, LPARAM lParamSort );
 
 static BOOL bReverse = TRUE;
@@ -32,6 +31,7 @@ public:
     INT yGetImageSize()const;
     void Redraw(CRect rect);
     void Sort( LPARAM func );
+    int GetSelectedColumn()const;
 private:
     CImageList hSmall;
     INT nameColumnSize;

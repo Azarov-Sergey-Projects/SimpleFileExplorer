@@ -8,6 +8,8 @@
 #include "Finder.h"
 
 
+
+
 class MyDialogBar :public CDialogImpl<MyDialogBar>
 {
 public:
@@ -49,6 +51,7 @@ public:
 
 	LRESULT OnColumn( int n, LPNMHDR pnmh, BOOL& )
 	{
+		int i =myListView.GetSelectedColumn();
 		myListView.Sort((LPARAM)pnmh);
 		return 0;
 	}
@@ -62,7 +65,6 @@ public:
 				OnCloseCmd( uMsg, wParam, lParam, bHandled );
 				return 0;
 			case IDC_BUTTON_APPLY:
-				//int i = 0;
 				ListView_DeleteAllItems(myListView.GetHWND());
 				GetDlgItemTextW( IDC_SEARCH_TEXT_BAR, FilePath );
 				if( FilePath.IsEmpty() )
@@ -72,7 +74,7 @@ public:
 				}
 				else
 				{
-					/*if( FindThread.joinable() )
+					if( FindThread.joinable() )
 					{
 						FindThread.join();
 						FindThread = std::thread( ( &Finder::findFile ), this->myListView, FilePath, i );
@@ -80,8 +82,8 @@ public:
 					else
 					{
 						FindThread = std::thread( ( &Finder::findFile ), this->myListView, FilePath,i );
-					}*/
-					FindThread = std::thread( ( &Finder::findFile ), this->myListView, FilePath, i );
+					}
+					//FindThread = std::thread( ( &Finder::findFile ), this->myListView, FilePath, i );
 				}
 				return 0;
 		}
