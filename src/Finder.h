@@ -21,17 +21,17 @@ class Finder
 public:
     void create( HWND m_hWnd );
     void findFile( CString szPath,int i );
-    std::tuple<CString, CString> Split( CString buf );
-    HWND GetHWND()const;
-    BOOL GetItemText( INT nItem, int nSub, CString& pszText )const;
-    void SetDialogSize( CRect rect );
-    CRect GetImagePreViewSize()const;
+    std::tuple<CString, CString> split( CString buf );
+    HWND getHWND()const;
+    BOOL getItemText( INT nItem, int nSub, CString& pszText )const;
+    void setDialogSize( CRect rect );
+    CRect getImagePreViewSize()const;
     INT xGetImageSize()const;
     INT yGetImageSize()const;
-    void Redraw(CRect rect);
-    void Sort( LPNMHDR func );
-    void SetReverse();
-    BOOL GetReverse()const;
+    void redraw(CRect rect);
+    void sort( LPNMHDR func );
+    void setReverse();
+    BOOL getReverse()const;
     struct AdditionalTmp
     {
          BOOL bReverse;
@@ -50,9 +50,9 @@ private:
     CRect sizeListView;
     CRect sizeImagePreView;
     HWND ListView_hWnd;
-    void SetListViewSize();
-    void SetImagePreViewSize();
-    void SetColumnSizes();
+    void setListViewSize();
+    void setImagePreViewSize();
+    void setColumnSizes();
     void view_List( CString buf, int i, CString path );
 };
 

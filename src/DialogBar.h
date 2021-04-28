@@ -32,11 +32,11 @@ public:
 	{
 		CRect rect;
 		GetClientRect( &rect );
-		ListView.Redraw(rect);
+		ListView.redraw(rect);
 		if( imageFile )
 		{
 			imageFile.DestroyWindow();
-			imageFile.Create( this->m_hWnd,static_cast<ATL::_U_RECT>(ListView.GetImagePreViewSize()),NULL, WS_CHILD | WS_VISIBLE|SS_BITMAP,NULL,1,NULL);
+			imageFile.Create( this->m_hWnd,static_cast<ATL::_U_RECT>(ListView.getImagePreViewSize()),NULL, WS_CHILD | WS_VISIBLE|SS_BITMAP,NULL,1,NULL);
 			Image = reinterpret_cast< HBITMAP >( LoadImageW( NULL, fileName.GetString(), IMAGE_BITMAP, 
 															 ListView.xGetImageSize(), ListView.yGetImageSize(),
 															 LR_LOADFROMFILE ) );
@@ -52,7 +52,7 @@ public:
 
 	LRESULT OnColumn( int n, LPNMHDR pnmh, BOOL& )
 	{
-		ListView.Sort(pnmh);
+		ListView.sort(pnmh);
 		return 0;
 	}
 
@@ -65,7 +65,7 @@ public:
 				OnCloseCmd( uMsg, wParam, lParam, bHandled );
 				return 0;
 			case IDC_BUTTON_APPLY:
-				ListView_DeleteAllItems(ListView.GetHWND());
+				ListView_DeleteAllItems(ListView.getHWND());
 				GetDlgItemTextW( IDC_SEARCH_TEXT_BAR, FilePath );
 				if( FilePath.IsEmpty() )
 				{
@@ -91,17 +91,17 @@ public:
 	{
 		if( !imageFile )
 		{
-			imageFile.Create( this->m_hWnd,static_cast<ATL::_U_RECT>(ListView.GetImagePreViewSize()),NULL, WS_CHILD | WS_VISIBLE|SS_BITMAP,NULL,1,NULL);
+			imageFile.Create( this->m_hWnd,static_cast<ATL::_U_RECT>(ListView.getImagePreViewSize()),NULL, WS_CHILD | WS_VISIBLE|SS_BITMAP,NULL,1,NULL);
 		}
 		LPNMITEMACTIVATE lpItem = reinterpret_cast< LPNMITEMACTIVATE >( pnmh );
-		ListView.GetItemText( lpItem->iItem, 1, fileName );
+		ListView.getItemText( lpItem->iItem, 1, fileName );
 		CString text;
-		text = std::get<1>( ListView.Split( fileName ) );
+		text = std::get<1>( ListView.split( fileName ) );
 
 		if( text == TEXT( ".bmp" ) )
 		{
 			
-			ListView.GetItemText( lpItem->iItem, 2, fileName );
+			ListView.getItemText( lpItem->iItem, 2, fileName );
 			Image = reinterpret_cast< HBITMAP >( LoadImageW( NULL, fileName.GetString(),
 															 IMAGE_BITMAP, ListView.xGetImageSize(),
 															 ListView.yGetImageSize(), LR_LOADFROMFILE ) );
@@ -119,9 +119,9 @@ public:
 	{
 		CRect dialogRect;
 		GetClientRect( &dialogRect );
-		ListView.SetDialogSize( dialogRect );
+		ListView.setDialogSize( dialogRect );
 		ListView.create( m_hWnd );
-		imageFile.Create( this->m_hWnd,static_cast<ATL::_U_RECT>(ListView.GetImagePreViewSize()),NULL, WS_CHILD | WS_VISIBLE|SS_BITMAP,NULL,1,NULL);
+		imageFile.Create( this->m_hWnd,static_cast<ATL::_U_RECT>(ListView.getImagePreViewSize()),NULL, WS_CHILD | WS_VISIBLE|SS_BITMAP,NULL,1,NULL);
 		return 0;
 	}
 

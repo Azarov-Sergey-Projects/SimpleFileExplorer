@@ -73,8 +73,8 @@ void Finder::findFile( CString szPath,int i )
 void Finder::view_List( CString name, int i, CString path )
 {
 	SHFILEINFOW lp{};
-	CString nameWithoutEx = std::get<0>( Split( name ) );
-	CString extention = std::get<1>( Split( name ) );
+	CString nameWithoutEx = std::get<0>( split( name ) );
+	CString extention = std::get<1>( split( name ) );
 	lvItem.mask = LVIF_IMAGE | LVIF_TEXT;
 	lvItem.state = 0;
 	lvItem.stateMask = 0;
@@ -93,7 +93,7 @@ void Finder::view_List( CString name, int i, CString path )
 	DestroyIcon( lp.hIcon );
 }
 
-std::tuple<CString, CString> Finder::Split( CString buf )
+std::tuple<CString, CString> Finder::split( CString buf )
 {
 	CString tmp = buf;
 	if( buf.Find( TEXT( "." ) ) == -1||buf.Find(TEXT(".")==0)&&buf.Find(TEXT("."),1)==-1)//folder
@@ -116,25 +116,25 @@ std::tuple<CString, CString> Finder::Split( CString buf )
 	}
 }
 
-HWND Finder::GetHWND()const
+HWND Finder::getHWND()const
 {
 	return ListView_hWnd;
 }
 
-BOOL Finder::GetItemText( INT nItem, int nSub,CString& pszText )const
+BOOL Finder::getItemText( INT nItem, int nSub,CString& pszText )const
 {
 	return Tmp.ListView.GetItemText(nItem,nSub,pszText );
 }
 
-void Finder::SetDialogSize( CRect rect )
+void Finder::setDialogSize( CRect rect )
 {
 	sizeDialogBox = rect;
-	SetListViewSize();
-	SetImagePreViewSize();
-	SetColumnSizes();
+	setListViewSize();
+	setImagePreViewSize();
+	setColumnSizes();
 }
 
-void Finder::SetListViewSize()
+void Finder::setListViewSize()
 {
 	sizeListView.bottom= sizeDialogBox.bottom-sizeDialogBox.bottom/8;
 	sizeListView.top =sizeDialogBox.top;
@@ -142,7 +142,7 @@ void Finder::SetListViewSize()
 	sizeListView.left =sizeDialogBox.left;
 }
 
-void Finder::SetImagePreViewSize()
+void Finder::setImagePreViewSize()
 {
 	sizeImagePreView.top = sizeListView.top;
 	sizeImagePreView.left = sizeListView.right;
@@ -150,7 +150,7 @@ void Finder::SetImagePreViewSize()
 	sizeImagePreView.right = sizeDialogBox.right;
 }
 
-CRect Finder::GetImagePreViewSize()const
+CRect Finder::getImagePreViewSize()const
 {
 	return sizeImagePreView;
 }
@@ -165,13 +165,13 @@ INT Finder::yGetImageSize()const
 	return sizeListView.bottom;
 }
 
-void Finder::Redraw( CRect rect )
+void Finder::redraw( CRect rect )
 {
-	SetDialogSize( rect );
+	setDialogSize( rect );
 	Tmp.ListView.SetWindowPos( HWND_BOTTOM, sizeListView, NULL );
 }
 
-void Finder::SetColumnSizes()
+void Finder::setColumnSizes()
 {
 	 nameColumnSize = sizeListView.right / 3;
 	 extentionColumnSize =  50;
@@ -195,20 +195,20 @@ void Finder::SetColumnSizes()
 	}
 }
 
-void Finder::Sort( LPNMHDR lParamSort )
+void Finder::sort( LPNMHDR lParamSort )
 {
-	SetReverse();
+	setReverse();
 	LPNMLISTVIEW list = reinterpret_cast< LPNMLISTVIEW >(lParamSort);
 	Tmp.columnInd = list->iSubItem;
 	Tmp.ListView.SortItemsEx( &CompareFunc, reinterpret_cast<LPARAM>(&Tmp) );
 }
 
-void Finder::SetReverse()
+void Finder::setReverse()
 {
 	Tmp.bReverse = !Tmp.bReverse;
 }
 
-BOOL Finder::GetReverse()const
+BOOL Finder::getReverse()const
 {
 	return Tmp.bReverse;
 }
