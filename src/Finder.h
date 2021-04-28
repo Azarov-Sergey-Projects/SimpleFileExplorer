@@ -13,14 +13,7 @@
 #include "resource2.h"
 
 
-static int columnInd;
-
-
-
 int CALLBACK CompareFunc( LPARAM lParam1, LPARAM lParam2, LPARAM lParamSort );
-
-static BOOL bReverse = TRUE;
-
 
 
 class Finder 
@@ -37,19 +30,26 @@ public:
     INT yGetImageSize()const;
     void Redraw(CRect rect);
     void Sort( LPNMHDR func );
-
+    void SetReverse();
+    BOOL GetReverse()const;
+    struct AdditionalTmp
+    {
+         BOOL bReverse;
+         CListViewCtrl ListView;
+         int columnInd;
+    };
 private:
+    AdditionalTmp Tmp;
     CImageList hSmall;
     INT nameColumnSize;
     INT extentionColumnSize;
     INT pathColumnSize;
     LVITEM lvItem;
-    CListViewCtrl myListView;
     CString path;
     CRect sizeDialogBox;
     CRect sizeListView;
     CRect sizeImagePreView;
-    HWND my_hWnd;
+    HWND ListView_hWnd;
     void SetListViewSize();
     void SetImagePreViewSize();
     void SetColumnSizes();

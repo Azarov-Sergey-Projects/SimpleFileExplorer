@@ -11,7 +11,7 @@
 
 static std::atomic_bool StopThread = false;
 
-class MyDialogBar :public CDialogImpl<MyDialogBar>
+class DialogBar :public CDialogImpl<DialogBar>
 {
 public:
 	enum
@@ -19,7 +19,7 @@ public:
 		IDD = IDD_MYDIALOGBAR
 	};
 
-	BEGIN_MSG_MAP( MyDialogBar )
+	BEGIN_MSG_MAP( DialogBar )
 		MESSAGE_HANDLER( WM_INITDIALOG, OnInitDialog )
 		MESSAGE_HANDLER(WM_SIZE,OnSize)
 		MESSAGE_HANDLER( WM_COMMAND, OnCommand )
@@ -32,13 +32,13 @@ public:
 	{
 		CRect rect;
 		GetClientRect( &rect );
-		myListView.Redraw(rect);
+		ListView.Redraw(rect);
 		if( imageFile )
 		{
 			imageFile.DestroyWindow();
-			imageFile.Create( this->m_hWnd,static_cast<ATL::_U_RECT>(myListView.GetImagePreViewSize()),NULL, WS_CHILD | WS_VISIBLE|SS_BITMAP,NULL,1,NULL);
+			imageFile.Create( this->m_hWnd,static_cast<ATL::_U_RECT>(ListView.GetImagePreViewSize()),NULL, WS_CHILD | WS_VISIBLE|SS_BITMAP,NULL,1,NULL);
 			Image = reinterpret_cast< HBITMAP >( LoadImageW( NULL, fileName.GetString(), IMAGE_BITMAP, 
-															 myListView.xGetImageSize(), myListView.yGetImageSize(),
+															 ListView.xGetImageSize(), ListView.yGetImageSize(),
 															 LR_LOADFROMFILE ) );
 			imageFile.SetBitmap( Image );
 		}
@@ -52,7 +52,7 @@ public:
 
 	LRESULT OnColumn( int n, LPNMHDR pnmh, BOOL& )
 	{
-		myListView.Sort(pnmh);
+		ListView.Sort(pnmh);
 		return 0;
 	}
 
@@ -65,7 +65,7 @@ public:
 				OnCloseCmd( uMsg, wParam, lParam, bHandled );
 				return 0;
 			case IDC_BUTTON_APPLY:
-				ListView_DeleteAllItems(myListView.GetHWND());
+				ListView_DeleteAllItems(ListView.GetHWND());
 				GetDlgItemTextW( IDC_SEARCH_TEXT_BAR, FilePath );
 				if( FilePath.IsEmpty() )
 				{
@@ -80,36 +80,31 @@ public:
 						FindThread.join();
 						StopThread = FALSE;
 					}
-						FindThread = std::thread( ( &Finder::findFile ), this->myListView, FilePath, i );
-					
-					/*else
-					{
-						FindThread = std::thread( ( &Finder::findFile ), this->myListView, FilePath,i );
-					}*/
+					FindThread = std::thread( ( &Finder::findFile ), this->ListView, FilePath, i );
+					return 0;
 				}
 				return 0;
 		}
-		return 0;
 	}
 
 	LRESULT OnItemClick( int, LPNMHDR pnmh, BOOL& )
 	{
 		if( !imageFile )
 		{
-			imageFile.Create( this->m_hWnd,static_cast<ATL::_U_RECT>(myListView.GetImagePreViewSize()),NULL, WS_CHILD | WS_VISIBLE|SS_BITMAP,NULL,1,NULL);
+			imageFile.Create( this->m_hWnd,static_cast<ATL::_U_RECT>(ListView.GetImagePreViewSize()),NULL, WS_CHILD | WS_VISIBLE|SS_BITMAP,NULL,1,NULL);
 		}
 		LPNMITEMACTIVATE lpItem = reinterpret_cast< LPNMITEMACTIVATE >( pnmh );
-		myListView.GetItemText( lpItem->iItem, 1, fileName );//получаю имя файла с расширением
+		ListView.GetItemText( lpItem->iItem, 1, fileName );
 		CString text;
-		text = std::get<1>( myListView.Split( fileName ) );
+		text = std::get<1>( ListView.Split( fileName ) );
 
 		if( text == TEXT( ".bmp" ) )
 		{
 			
-			myListView.GetItemText( lpItem->iItem, 2, fileName );//получаю путь к файлу файла
+			ListView.GetItemText( lpItem->iItem, 2, fileName );
 			Image = reinterpret_cast< HBITMAP >( LoadImageW( NULL, fileName.GetString(),
-															 IMAGE_BITMAP, myListView.xGetImageSize(),
-															 myListView.yGetImageSize(), LR_LOADFROMFILE ) );
+															 IMAGE_BITMAP, ListView.xGetImageSize(),
+															 ListView.yGetImageSize(), LR_LOADFROMFILE ) );
 			imageFile.SetBitmap( Image );
 			return 0;
 		}
@@ -118,16 +113,15 @@ public:
 			imageFile.DestroyWindow();
 			return 0;
 		}
-		return 0;
 	}
 
 	LRESULT OnInitDialog( UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/ )
 	{
 		CRect dialogRect;
 		GetClientRect( &dialogRect );
-		myListView.SetDialogSize( dialogRect );
-		myListView.create( m_hWnd );
-		imageFile.Create( this->m_hWnd,static_cast<ATL::_U_RECT>(myListView.GetImagePreViewSize()),NULL, WS_CHILD | WS_VISIBLE|SS_BITMAP,NULL,1,NULL);
+		ListView.SetDialogSize( dialogRect );
+		ListView.create( m_hWnd );
+		imageFile.Create( this->m_hWnd,static_cast<ATL::_U_RECT>(ListView.GetImagePreViewSize()),NULL, WS_CHILD | WS_VISIBLE|SS_BITMAP,NULL,1,NULL);
 		return 0;
 	}
 
@@ -146,7 +140,7 @@ public:
 private:
 	CString FilePath;
 	CString fileName;
-	Finder myListView;
+	Finder ListView;
 	std::thread FindThread;
 	CStatic imageFile;
 	HBITMAP Image;

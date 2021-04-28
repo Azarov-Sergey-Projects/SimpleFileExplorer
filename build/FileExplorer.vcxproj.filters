@@ -27,9 +27,6 @@
     <ClInclude Include="..\src\Lab1_WTL.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\MyDialogBar.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="..\src\resource.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -42,10 +39,10 @@
     <ClInclude Include="..\src\targetver.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\rec\resource2.h">
+    <ClInclude Include="resource3.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="resource3.h">
+    <ClInclude Include="..\src\DialogBar.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -64,13 +61,13 @@
     <ResourceCompile Include="..\rec\Lab1_WTL.rc">
       <Filter>Resource Files</Filter>
     </ResourceCompile>
-    <ResourceCompile Include="..\rec\MyDialog.rc">
-      <Filter>Resource Files</Filter>
-    </ResourceCompile>
     <ResourceCompile Include="..\rec\ToolBar.rc">
       <Filter>Resource Files</Filter>
     </ResourceCompile>
     <ResourceCompile Include="ResizibleDialog.rc">
+      <Filter>Resource Files</Filter>
+    </ResourceCompile>
+    <ResourceCompile Include="..\rec\Dialog.rc">
       <Filter>Resource Files</Filter>
     </ResourceCompile>
   </ItemGroup>

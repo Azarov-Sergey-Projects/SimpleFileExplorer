@@ -1,15 +1,20 @@
 #include "Finder.h"
-#include "MyDialogBar.h"
+#include "DialogBar.h"
+
+
+
+
+
 void Finder::create( HWND m_hWnd )
 {
-	my_hWnd = myListView.Create( m_hWnd, sizeListView, NULL, WS_CHILD | WS_VISIBLE | WS_VSCROLL |
-								 WS_SIZEBOX | WS_CLIPSIBLINGS | WS_CLIPCHILDREN |
+	ListView_hWnd = Tmp.ListView.Create( m_hWnd, sizeListView, NULL, WS_CHILD | WS_VISIBLE | WS_VSCROLL |
+								 WS_CLIPSIBLINGS | WS_CLIPCHILDREN |
 								 LVS_REPORT | LVS_AUTOARRANGE | DS_ABSALIGN |
 								 LVS_SHOWSELALWAYS | LVS_SHAREIMAGELISTS );
 	
-	myListView.InsertColumn(0, TEXT( "Название" ), LVCFMT_LEFT, nameColumnSize );
-	myListView.InsertColumn(1, TEXT( ".*" ), LVCFMT_LEFT, extentionColumnSize );
-	myListView.InsertColumn(2,  TEXT( "Полный путь" ), LVCFMT_LEFT, pathColumnSize );
+	Tmp.ListView.InsertColumn(0, TEXT( "FileName" ), LVCFMT_LEFT, nameColumnSize );
+	Tmp.ListView.InsertColumn(1, TEXT( ".*" ), LVCFMT_LEFT, extentionColumnSize );
+	Tmp.ListView.InsertColumn(2,  TEXT( "Path" ), LVCFMT_LEFT, pathColumnSize );
 	hSmall.Create( GetSystemMetrics( SM_CXSMICON ),
 				   GetSystemMetrics( SM_CYSMICON ),
 				   ILC_MASK | ILC_COLOR32, 10, 1 );
@@ -17,52 +22,54 @@ void Finder::create( HWND m_hWnd )
 
 void Finder::findFile( CString szPath,int i )
 {
-	CFindFile F;
+	CFindFile FileSearch;
 	CString S = szPath + TEXT( "\\*.*" );
-	BOOL bFlag = F.FindFile( S );
+	BOOL bFlag = FileSearch.FindFile( S );
 	if( !bFlag )
 	{
-		MessageBox(my_hWnd, TEXT( "Error" ), TEXT( "File not found" ), 0 );
+		MessageBox(ListView_hWnd, TEXT( "Error" ), TEXT( "File not found" ), 0 );
 	}
 	else
 	{
 		
 		do
 		{
-			if( F.IsDots() )
+			if( FileSearch.IsDots() )
 			{
 				continue;
 			}
 			else
 			{
-				view_List( F.GetFileName(), i, F.GetFilePath() );
+				view_List( FileSearch.GetFileName(), i, FileSearch.GetFilePath() );
 				i++;
-				if( F.IsDirectory() )
+				if( FileSearch.IsDirectory() )
 				{
-					CFindFile G;
-					G.FindFile( F.GetFilePath() + TEXT( "\\*.*" ) );
+					CFindFile DirectoryFileSeach;
+					DirectoryFileSeach.FindFile( FileSearch.GetFilePath() + TEXT( "\\*.*" ) );
 					do
 					{
-						if( G.IsDots() )
+						if( DirectoryFileSeach.IsDots() )
 						{
 							continue;
 						}
-						view_List( G.GetFileName(), i, G.GetFilePath() );
+						view_List( DirectoryFileSeach.GetFileName(), i, DirectoryFileSeach.GetFilePath() );
 						i++;
-					} while( G.FindNextFileW() );
-					G.Close();
+						if( StopThread)
+						{
+							return;
+						}
+					} while( DirectoryFileSeach.FindNextFileW() );
+					DirectoryFileSeach.Close();
 				}
 			}
 			if( StopThread)
 			{
 				return;
 			}
-		} while( F.FindNextFileW() );
-		F.Close();
+		} while( FileSearch.FindNextFileW() );
+		FileSearch.Close();
 	}
-	myListView.SetImageList( hSmall, 1 );
-	//initListViewImage(S.GetString() );
-	//myListView.SetImageList( hSmall, 1 );
+	Tmp.ListView.SetImageList( hSmall, 1 );
 }
 
 void Finder::view_List( CString name, int i, CString path )
@@ -78,9 +85,9 @@ void Finder::view_List( CString name, int i, CString path )
 	lvItem.iSubItem = 0;
 	lvItem.pszText = const_cast< LPWSTR >( nameWithoutEx.GetString() );
 	lvItem.cchTextMax = nameWithoutEx.GetLength();
-	myListView.InsertItem( &lvItem );
-	myListView.SetItemText( i, 1, extention.GetString() );
-	myListView.SetItemText( i, 2, path.GetString() );
+	Tmp.ListView.InsertItem( &lvItem );
+	Tmp.ListView.SetItemText( i, 1, extention.GetString() );
+	Tmp.ListView.SetItemText( i, 2, path.GetString() );
 	DWORD num = GetFileAttributesW( path.GetString() );
 	SHGetFileInfoW( path.GetString(), num, &lp, sizeof( lp ),
 					SHGFI_SYSICONINDEX | SHGFI_ICON | SHGFI_USEFILEATTRIBUTES );
@@ -91,7 +98,7 @@ void Finder::view_List( CString name, int i, CString path )
 std::tuple<CString, CString> Finder::Split( CString buf )
 {
 	CString tmp = buf;
-	if( buf.Find( TEXT( "." ) ) == -1 )//папка
+	if( buf.Find( TEXT( "." ) ) == -1 )//folder
 	{
 		return { buf.GetString(),TEXT( "Папка" ) };
 	}
@@ -113,12 +120,12 @@ std::tuple<CString, CString> Finder::Split( CString buf )
 
 HWND Finder::GetHWND()const
 {
-	return my_hWnd;
+	return ListView_hWnd;
 }
 
 BOOL Finder::GetItemText( INT nItem, int nSub,CString& pszText )const
 {
-	return myListView.GetItemText(nItem,nSub,pszText );
+	return Tmp.ListView.GetItemText(nItem,nSub,pszText );
 }
 
 void Finder::SetDialogSize( CRect rect )
@@ -163,7 +170,7 @@ INT Finder::yGetImageSize()const
 void Finder::Redraw( CRect rect )
 {
 	SetDialogSize( rect );
-	myListView.SetWindowPos( HWND_BOTTOM, sizeListView, NULL );
+	Tmp.ListView.SetWindowPos( HWND_BOTTOM, sizeListView, NULL );
 }
 
 void Finder::SetColumnSizes()
@@ -173,15 +180,14 @@ void Finder::SetColumnSizes()
 	 pathColumnSize = sizeListView.right - nameColumnSize - extentionColumnSize;
 }
 
-
  int CALLBACK CompareFunc( LPARAM lParam1, LPARAM lParam2, LPARAM lParamSort )
 {
-	CListViewCtrl* myListView = reinterpret_cast<CListViewCtrl*>(lParamSort);
+	Finder::AdditionalTmp* ListViewCast =reinterpret_cast<Finder::AdditionalTmp*>(lParamSort);
 	CString FirstFile;
 	CString SecondFile;
-	myListView->GetItemText( static_cast< int >( lParam1 ),columnInd, FirstFile );
-	myListView->GetItemText( static_cast<int>(lParam2),columnInd, SecondFile );
-	if( bReverse )
+	ListViewCast->ListView.GetItemText( static_cast< int >( lParam1 ),ListViewCast->columnInd, FirstFile );
+	ListViewCast->ListView.GetItemText( static_cast<int>(lParam2),ListViewCast->columnInd, SecondFile );
+	if( ListViewCast->bReverse )
 	{
 		return  StrCmpW( SecondFile.GetString(), FirstFile.GetString() );
 	}
@@ -192,10 +198,20 @@ void Finder::SetColumnSizes()
 }
 
 
-void Finder::Sort( LPNMHDR func )
+void Finder::Sort( LPNMHDR lParamSort )
 {
-	bReverse = !bReverse;
-	LPNMLISTVIEW list = ( LPNMLISTVIEW )func;
-	columnInd = list->iSubItem;
-	myListView.SortItemsEx( &CompareFunc, (LPARAM)func );
+	SetReverse();
+	LPNMLISTVIEW list = reinterpret_cast< LPNMLISTVIEW >(lParamSort);
+	Tmp.columnInd = list->iSubItem;
+	Tmp.ListView.SortItemsEx( &CompareFunc, reinterpret_cast<LPARAM>(&Tmp) );
+}
+
+void Finder::SetReverse()
+{
+	Tmp.bReverse = !Tmp.bReverse;
+}
+
+BOOL Finder::GetReverse()const
+{
+	return Tmp.bReverse;
 }

@@ -11,7 +11,7 @@ extern CAppModule _Module;
 #include <atlctrlx.h>
 #include <atldlgs.h>
 
-#include "MyDialogBar.h"
+#include "DialogBar.h"
 #include "AboutDlg.h"
 CAppModule _Module;
 
@@ -46,7 +46,7 @@ public:
         CPaintDC dc( m_hWnd );
         CRect rect;
         GetClientRect( rect );
-        dc.DrawTextW( TEXT( "Приветствую в моем маленьком проводнике, искатель)" ), -1, rect, DT_SINGLELINE | DT_CENTER | DT_VCENTER );
+        dc.DrawTextW( TEXT( "Welcome to my File Explorer,traveler)" ), -1, rect, DT_SINGLELINE | DT_CENTER | DT_VCENTER );
         return 0;
     }
     LRESULT OnDestroy( UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled )
@@ -62,7 +62,7 @@ public:
     }
     LRESULT OnSearch( UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled )
     {
-        MyDialogBar SearchBar;
+        DialogBar SearchBar;
         SearchBar.DoModal();
         return 0;
     }
@@ -78,7 +78,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE, LPSTR, int)
     _Module.Init(0, hInstance, 0);
 
     CMainWindow wnd;
-    wnd.Create(NULL, CWindow::rcDefault, TEXT("Поисковик"));
+    wnd.Create(NULL, CWindow::rcDefault, TEXT("File Explorer"));
     wnd.ShowWindow(SW_SHOW);
     CMessageLoop loop;
     int res = loop.Run();
