@@ -3,8 +3,6 @@
 
 
 
-
-
 void Finder::create( HWND m_hWnd )
 {
 	ListView_hWnd = Tmp.ListView.Create( m_hWnd, sizeListView, NULL, WS_CHILD | WS_VISIBLE | WS_VSCROLL |
@@ -98,9 +96,9 @@ void Finder::view_List( CString name, int i, CString path )
 std::tuple<CString, CString> Finder::Split( CString buf )
 {
 	CString tmp = buf;
-	if( buf.Find( TEXT( "." ) ) == -1 )//folder
+	if( buf.Find( TEXT( "." ) ) == -1||buf.Find(TEXT(".")==0)&&buf.Find(TEXT("."),1)==-1)//folder
 	{
-		return { buf.GetString(),TEXT( "Папка" ) };
+		return { buf.GetString(),TEXT( "Directory" ) };
 	}
 	else
 	{
@@ -196,7 +194,6 @@ void Finder::SetColumnSizes()
 		return StrCmpW( FirstFile.GetString(),SecondFile.GetString() );
 	}
 }
-
 
 void Finder::Sort( LPNMHDR lParamSort )
 {
