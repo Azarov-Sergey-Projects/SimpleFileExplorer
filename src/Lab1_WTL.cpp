@@ -2,6 +2,7 @@
 //
 
 #include <atlbase.h>
+#include <atlwin.h>
 #include <atlapp.h>
 extern CAppModule _Module;
 #include <atlgdi.h>

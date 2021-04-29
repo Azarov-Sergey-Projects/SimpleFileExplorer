@@ -42,6 +42,7 @@
     <ResourceCompile Include="ResizibleDialog.rc" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\src\DialogBar.cpp" />
     <ClCompile Include="..\src\Finder.cpp" />
     <ClCompile Include="..\src\Lab1_WTL.cpp" />
   </ItemGroup>

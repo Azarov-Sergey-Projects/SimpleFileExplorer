@@ -43,10 +43,10 @@ void Finder::findFile( CString szPath, int& i )
 					findFile( FileSearch.GetFilePath(), i );
 				}
 				view_List( FileSearch.GetFileName(), i, FileSearch.GetFilePath() );
-				if( StopThread )
+				/*if( StopThread )
 				{
 					return;
-				}
+				}*/
 				i++;
 			}
 		} while( FileSearch.FindNextFileW() );

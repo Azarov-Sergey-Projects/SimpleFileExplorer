@@ -1,7 +1,9 @@
+
 #include "DialogBar.h"
-#include "resource.h"
+
+/*#include "resource.h"
 #include "resource2.h"
-#include "Finder.h"
+#include "Finder.h"*/
 
 
 LRESULT DialogBar::OnCommand( UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled )
@@ -24,11 +26,11 @@ LRESULT DialogBar::OnCommand( UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHa
 			{
 				if( FindThread.joinable() )
 				{
-					StopThread = TRUE;
+					//StopThread = TRUE;
 					FindThread.join();
-					StopThread = FALSE;
+					//StopThread = FALSE;
 				}
-				FindThread = std::thread( ( &Finder::findFile ), this->ListView, FilePath, i );
+				FindThread = std::thread( ( &Finder::findFile ), this->ListView, FilePath, std::ref(i) );
 				return 0;
 			}
 			return 0;
@@ -43,10 +45,9 @@ LRESULT DialogBar::OnItemClick( int, LPNMHDR pnmh, BOOL& )
 	}
 	LPNMITEMACTIVATE lpItem = reinterpret_cast< LPNMITEMACTIVATE >( pnmh );
 	ListView.getItemText( lpItem->iItem, 1, fileName );
-	CString text;
-	text = std::get<1>( ListView.split( fileName ) );
 
-	if( text == TEXT( ".bmp" ) )
+
+	if( fileName == TEXT( ".bmp" ) )
 	{
 
 		ListView.getItemText( lpItem->iItem, 2, fileName );
@@ -77,7 +78,7 @@ LRESULT DialogBar::OnCloseCmd( UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam
 {
 	if( FindThread.joinable() )
 	{
-		StopThread = TRUE;
+		//StopThread = TRUE;
 		FindThread.join();
 	}
 	EndDialog( NULL );

@@ -1,8 +1,9 @@
 #pragma once
 #include <atlbase.h>
+#include <atlwin.h>
 #include <atlapp.h>
 #include <atlmisc.h>
-#include <atlwin.h>
+
 #include <atlctrls.h>
 #include <atlfile.h>
 #include <atlstr.h>
