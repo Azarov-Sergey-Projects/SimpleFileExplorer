@@ -1,5 +1,4 @@
 #include "Finder.h"
-#include "DialogBar.h"
 
 
 
@@ -18,8 +17,9 @@ void Finder::create( HWND m_hWnd )
 				   ILC_MASK | ILC_COLOR32, 10, 1 );
 }
 
-void Finder::findFile( CString szPath,int i )
+/*void Finder::findFile( CString szPath,int i )
 {
+	CString ExtentionFILE;
 	CFindFile FileSearch;
 	CString S = szPath + TEXT( "\\*.*" );
 	BOOL bFlag = FileSearch.FindFile( S );
@@ -29,7 +29,6 @@ void Finder::findFile( CString szPath,int i )
 	}
 	else
 	{
-		
 		do
 		{
 			if( FileSearch.IsDots() )
@@ -38,38 +37,78 @@ void Finder::findFile( CString szPath,int i )
 			}
 			else
 			{
+				ExtentionFILE = FileSearch.GetFileName();
+				if( ExtentionFILE.Find( TEXT( "." ) ) == -1 && ( !FileSearch.IsDirectory() ) )
+				{
+					view_List( FileSearch.GetFileName() + TEXT( ".FILE" ), i, FileSearch.GetFilePath() );
+					i++;
+					continue;
+				}
 				view_List( FileSearch.GetFileName(), i, FileSearch.GetFilePath() );
 				i++;
 				if( FileSearch.IsDirectory() )
 				{
-					CFindFile DirectoryFileSeach;
-					DirectoryFileSeach.FindFile( FileSearch.GetFilePath() + TEXT( "\\*.*" ) );
+					CFindFile DirectoryFileSearch;
+					DirectoryFileSearch.FindFile( FileSearch.GetFilePath() + TEXT( "\\*.*" ) );
 					do
 					{
-						if( DirectoryFileSeach.IsDots() )
+						if( DirectoryFileSearch.IsDots() )
 						{
 							continue;
 						}
-						view_List( DirectoryFileSeach.GetFileName(), i, DirectoryFileSeach.GetFilePath() );
-						i++;
-						if( StopThread)
+						ExtentionFILE = DirectoryFileSearch.GetFileName();
+						if( ExtentionFILE.Find( TEXT( "." ) ) == -1 && ( !DirectoryFileSearch.IsDirectory() ) )
 						{
-							return;
+							view_List( DirectoryFileSearch.GetFileName() + TEXT( ".FILE" ), i, DirectoryFileSearch.GetFilePath() );
+							i++;
+							continue;
 						}
-					} while( DirectoryFileSeach.FindNextFileW() );
-					DirectoryFileSeach.Close();
+						view_List( DirectoryFileSearch.GetFileName(), i, DirectoryFileSearch.GetFilePath() );
+						i++;
+					} while( DirectoryFileSearch.FindNextFileW() );
+					DirectoryFileSearch.Close();
 				}
 			}
-			if( StopThread)
+		} while( FileSearch.FindNextFileW() );
+		FileSearch.Close();
+	}
+	Tmp.ListView.SetImageList( hSmall, 1 );
+}*/
+
+void Finder::findFile( CString szPath,int i )
+{
+	CString ExtentionFILE;
+	CFindFile FileSearch;
+	CString S = szPath + TEXT( "\\*.*" );
+	BOOL bFlag = FileSearch.FindFile( S );
+	if( !bFlag )
+	{
+		MessageBox( ListView_hWnd, TEXT( "Error" ), TEXT( "File not found" ), 0 );
+	}
+	else
+	{
+		do
+		{
+			if( FileSearch.IsDots() )
 			{
-				return;
+				continue;
+			}
+			else
+			{
+				if( FileSearch.IsDirectory() )
+				{
+					findFile( FileSearch.GetFilePath(),i );
+					i++;
+				}
+				view_List( FileSearch.GetFileName(), i, FileSearch.GetFilePath() );
+				i++;
 			}
 		} while( FileSearch.FindNextFileW() );
 		FileSearch.Close();
 	}
 	Tmp.ListView.SetImageList( hSmall, 1 );
 }
-
+				
 void Finder::view_List( CString name, int i, CString path )
 {
 	SHFILEINFOW lp{};
@@ -96,7 +135,7 @@ void Finder::view_List( CString name, int i, CString path )
 std::tuple<CString, CString> Finder::split( CString buf )
 {
 	CString tmp = buf;
-	if( buf.Find( TEXT( "." ) ) == -1||buf.Find(TEXT(".")==0)&&buf.Find(TEXT("."),1)==-1)//folder
+	if( buf.Find( TEXT( "." ),0 ) == -1)
 	{
 		return { buf.GetString(),TEXT( "Directory" ) };
 	}

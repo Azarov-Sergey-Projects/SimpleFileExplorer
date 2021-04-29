@@ -7,9 +7,8 @@
 #include <atlfile.h>
 #include <atlstr.h>
 
-
+#include <atomic>
 #include <tuple>
-
 #include "resource2.h"
 
 
@@ -32,6 +31,10 @@ public:
     void sort( LPNMHDR func );
     void setReverse();
     BOOL getReverse()const;
+    void SetAtomic()
+    {
+   //     StopThread = !StopThread;
+    }
     struct AdditionalTmp
     {
          BOOL bReverse;
@@ -39,6 +42,7 @@ public:
          int columnInd;
     };
 private:
+   // std::atomic<BOOL> StopThread=FALSE;
     AdditionalTmp Tmp;
     CImageList hSmall;
     INT nameColumnSize;
