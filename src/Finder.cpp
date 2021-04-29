@@ -1,5 +1,5 @@
 #include "Finder.h"
-
+#include "DialogBar.h"
 
 
 void Finder::create( HWND m_hWnd )
@@ -18,7 +18,7 @@ void Finder::create( HWND m_hWnd )
 }
 
 
-void Finder::findFile( CString szPath,int& i )
+void Finder::findFile( CString szPath, int& i )
 {
 	CString ExtentionFILE;
 	CFindFile FileSearch;
@@ -40,9 +40,13 @@ void Finder::findFile( CString szPath,int& i )
 			{
 				if( FileSearch.IsDirectory() )
 				{
-					findFile( FileSearch.GetFilePath(),i );
+					findFile( FileSearch.GetFilePath(), i );
 				}
 				view_List( FileSearch.GetFileName(), i, FileSearch.GetFilePath() );
+				if( StopThread )
+				{
+					return;
+				}
 				i++;
 			}
 		} while( FileSearch.FindNextFileW() );
@@ -77,7 +81,7 @@ void Finder::view_List( CString name, int i, CString path )
 std::tuple<CString, CString> Finder::split( CString buf )
 {
 	CString tmp = buf;
-	if( buf.Find( TEXT( "." ),0 ) == -1)
+	if( buf.Find( TEXT( "." ),1 ) == -1)
 	{
 		return { buf.GetString(),TEXT( "Directory" ) };
 	}

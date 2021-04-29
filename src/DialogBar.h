@@ -8,7 +8,7 @@
 #include "Finder.h"
 
 
-
+static std::atomic_bool StopThread = FALSE;
 
 
 class DialogBar :public CDialogImpl<DialogBar>
@@ -77,9 +77,15 @@ public:
 					if( FindThread.joinable() )
 					{
 						//ListView.SetAtomic();
+						StopThread = TRUE;
 						FindThread.join();
 						//ListView.SetAtomic();
+						StopThread = FALSE;
 					}
+					/*StopThread = TRUE;
+					FindThread.join();
+					StopThread = FALSE;*/
+					i = 0;
 					FindThread = std::thread( ( &Finder::findFile ), this->ListView, FilePath,std::ref(i) );
 					return 0;
 				}
@@ -95,10 +101,8 @@ public:
 		}
 		LPNMITEMACTIVATE lpItem = reinterpret_cast< LPNMITEMACTIVATE >( pnmh );
 		ListView.getItemText( lpItem->iItem, 1, fileName );
-		CString text;
-		text = std::get<1>( ListView.split( fileName ) );
 
-		if( text == TEXT( ".bmp" ) )
+		if( fileName == TEXT( ".bmp" ) )
 		{
 			
 			ListView.getItemText( lpItem->iItem, 2, fileName );
@@ -129,8 +133,9 @@ public:
 	{
 		if( FindThread.joinable() )
 		{
-			ListView.SetAtomic();
+			StopThread = TRUE;
 			FindThread.join();
+			StopThread = FALSE;
 		}
 		EndDialog( NULL );
 		return 0;
