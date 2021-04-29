@@ -19,7 +19,7 @@ class Finder
 {
 public:
     void create( HWND m_hWnd );
-    void findFile( CString szPath,int i );
+    void findFile( CString szPath,int &i );
     std::tuple<CString, CString> split( CString buf );
     HWND getHWND()const;
     BOOL getItemText( INT nItem, int nSub, CString& pszText )const;

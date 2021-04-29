@@ -80,7 +80,7 @@ public:
 						FindThread.join();
 						//ListView.SetAtomic();
 					}
-					FindThread = std::thread( ( &Finder::findFile ), this->ListView, FilePath,i );
+					FindThread = std::thread( ( &Finder::findFile ), this->ListView, FilePath,std::ref(i) );
 					return 0;
 				}
 				return 0;

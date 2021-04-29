@@ -17,65 +17,8 @@ void Finder::create( HWND m_hWnd )
 				   ILC_MASK | ILC_COLOR32, 10, 1 );
 }
 
-/*void Finder::findFile( CString szPath,int i )
-{
-	CString ExtentionFILE;
-	CFindFile FileSearch;
-	CString S = szPath + TEXT( "\\*.*" );
-	BOOL bFlag = FileSearch.FindFile( S );
-	if( !bFlag )
-	{
-		MessageBox(ListView_hWnd, TEXT( "Error" ), TEXT( "File not found" ), 0 );
-	}
-	else
-	{
-		do
-		{
-			if( FileSearch.IsDots() )
-			{
-				continue;
-			}
-			else
-			{
-				ExtentionFILE = FileSearch.GetFileName();
-				if( ExtentionFILE.Find( TEXT( "." ) ) == -1 && ( !FileSearch.IsDirectory() ) )
-				{
-					view_List( FileSearch.GetFileName() + TEXT( ".FILE" ), i, FileSearch.GetFilePath() );
-					i++;
-					continue;
-				}
-				view_List( FileSearch.GetFileName(), i, FileSearch.GetFilePath() );
-				i++;
-				if( FileSearch.IsDirectory() )
-				{
-					CFindFile DirectoryFileSearch;
-					DirectoryFileSearch.FindFile( FileSearch.GetFilePath() + TEXT( "\\*.*" ) );
-					do
-					{
-						if( DirectoryFileSearch.IsDots() )
-						{
-							continue;
-						}
-						ExtentionFILE = DirectoryFileSearch.GetFileName();
-						if( ExtentionFILE.Find( TEXT( "." ) ) == -1 && ( !DirectoryFileSearch.IsDirectory() ) )
-						{
-							view_List( DirectoryFileSearch.GetFileName() + TEXT( ".FILE" ), i, DirectoryFileSearch.GetFilePath() );
-							i++;
-							continue;
-						}
-						view_List( DirectoryFileSearch.GetFileName(), i, DirectoryFileSearch.GetFilePath() );
-						i++;
-					} while( DirectoryFileSearch.FindNextFileW() );
-					DirectoryFileSearch.Close();
-				}
-			}
-		} while( FileSearch.FindNextFileW() );
-		FileSearch.Close();
-	}
-	Tmp.ListView.SetImageList( hSmall, 1 );
-}*/
 
-void Finder::findFile( CString szPath,int i )
+void Finder::findFile( CString szPath,int& i )
 {
 	CString ExtentionFILE;
 	CFindFile FileSearch;
@@ -98,7 +41,6 @@ void Finder::findFile( CString szPath,int i )
 				if( FileSearch.IsDirectory() )
 				{
 					findFile( FileSearch.GetFilePath(),i );
-					i++;
 				}
 				view_List( FileSearch.GetFileName(), i, FileSearch.GetFilePath() );
 				i++;
