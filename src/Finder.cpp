@@ -1,6 +1,5 @@
 #include "Finder.h"
 
-#include <atomic>
 
 void Finder::create( HWND m_hWnd )
 {
@@ -16,7 +15,6 @@ void Finder::create( HWND m_hWnd )
 				   GetSystemMetrics( SM_CYSMICON ),
 				   ILC_MASK | ILC_COLOR32, 10, 1 );
 }
-
 
 void Finder::findFile( CString szPath, int& i )
 {
@@ -39,13 +37,13 @@ void Finder::findFile( CString szPath, int& i )
 			{
 				if( FileSearch.IsDirectory() )
 				{
-					findFile( FileSearch.GetFilePath(), i );
+					findFile(  FileSearch.GetFilePath(), i );
 				}
 				view_List( FileSearch.GetFileName(), i, FileSearch.GetFilePath() );
-				/*if( StopThread )
+				if( StopThread )
 				{
 					return;
-				}*/
+				}
 				i++;
 			}
 		} while( FileSearch.FindNextFileW() );
@@ -207,4 +205,24 @@ void Finder::SetAtomic()
 	StopThread = (!StopThread);
 }
 
+void Finder::StartThread(CString path)
+{
+	if( ThreadFindFile.joinable() )
+	{
+		SetAtomic();
+		ThreadFindFile.join();
+		SetAtomic();
+	}
+	imageIndex = 0;
+	ThreadFindFile=std::thread(  (&Finder::findFile),this , path, std::ref(imageIndex) );
+}
 
+void Finder::EndThread()
+{
+	if( ThreadFindFile.joinable() )
+	{
+		StopThread = TRUE;
+		ThreadFindFile.join();
+		StopThread = FALSE;
+	}
+}

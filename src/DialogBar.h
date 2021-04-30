@@ -3,7 +3,7 @@
 #include <atlwin.h>
 #include <atlapp.h>
 
-#include <thread>
+
 
 #include <Commctrl.h>
 #include "resource.h"
@@ -11,8 +11,7 @@
 #include "Finder.h"
 
 
-//static std::atomic_bool StopThread = FALSE;
-//static std::mutex MutexForThread;
+
 
 class DialogBar :public CDialogImpl<DialogBar>
 {
@@ -53,7 +52,6 @@ private:
 	CString FilePath;
 	CString fileName;
 	Finder ListView;
-	std::thread FindThread;
 	CStatic imageFile;
 	HBITMAP Image;
 	int imageIndex;

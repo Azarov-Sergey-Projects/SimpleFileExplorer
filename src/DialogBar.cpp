@@ -20,16 +20,7 @@ LRESULT DialogBar::OnCommand( UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHa
 			}
 			else
 			{
-				//MutexForThread.lock();
-				if( FindThread.joinable() )
-				{
-					ListView.SetAtomic();
-					FindThread.join();
-					ListView.SetAtomic();
-				}
-				imageIndex = 0;
-				FindThread = std::thread( ( &Finder::findFile ), this->ListView, FilePath, std::ref(imageIndex) );
-				//MutexForThread.unlock();
+				ListView.StartThread( FilePath );
 				return 0;
 			}
 			return 0;
@@ -75,11 +66,7 @@ LRESULT DialogBar::OnInitDialog( UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lPar
 
 LRESULT DialogBar::OnCloseCmd( UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/ )
 {
-	if( FindThread.joinable() )
-	{
-		//StopThread = TRUE;
-		FindThread.join();
-	}
+	ListView.EndThread();
 	EndDialog( NULL );
 	return 0;
 }

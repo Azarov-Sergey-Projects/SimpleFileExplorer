@@ -1,20 +1,19 @@
 #pragma once
-#include <atomic>
+
 #include <atlbase.h>
 #include <atlwin.h>
 #include <atlapp.h>
 #include <atlmisc.h>
-
 #include <atlctrls.h>
 #include <atlfile.h>
 #include <atlstr.h>
 
-//#include <mutex>
+#include <atomic>
 #include <tuple>
+#include <mutex>
+#include <thread>
 
-
-
-#include "resource2.h"
+//#include "resource2.h"
 
 
 int CALLBACK CompareFunc( LPARAM lParam1, LPARAM lParam2, LPARAM lParamSort );
@@ -44,9 +43,14 @@ public:
          CListViewCtrl ListView;
          int columnInd;
     };
+
+    void StartThread( CString path );
+    void EndThread();
 private:
-    std::atomic_bool StopThread;
-   // std::mutex MutexForThread;
+    int imageIndex;
+    std::atomic_bool StopThread = FALSE;
+    std::mutex MutexForThread;
+    std::thread ThreadFindFile;
     AdditionalTmp Tmp;
     CImageList hSmall;
     INT nameColumnSize;
