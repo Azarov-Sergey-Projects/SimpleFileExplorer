@@ -1,21 +1,17 @@
-
 #include "DialogBar.h"
 
-/*#include "resource.h"
-#include "resource2.h"
-#include "Finder.h"*/
 
 
 LRESULT DialogBar::OnCommand( UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled )
 {
-
+	
 	switch( wParam )
 	{
 		case IDC_BUTTON_EXIT:
 			OnCloseCmd( uMsg, wParam, lParam, bHandled );
 			return 0;
 		case IDC_BUTTON_APPLY:
-			ListView_DeleteAllItems(ListView.getHWND());
+			ListView.DeleteAllItems();
 			GetDlgItemTextW( IDC_SEARCH_TEXT_BAR, FilePath );
 			if( FilePath.IsEmpty() )
 			{
@@ -24,13 +20,16 @@ LRESULT DialogBar::OnCommand( UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHa
 			}
 			else
 			{
+				//MutexForThread.lock();
 				if( FindThread.joinable() )
 				{
-					//StopThread = TRUE;
+					ListView.SetAtomic();
 					FindThread.join();
-					//StopThread = FALSE;
+					ListView.SetAtomic();
 				}
-				FindThread = std::thread( ( &Finder::findFile ), this->ListView, FilePath, std::ref(i) );
+				imageIndex = 0;
+				FindThread = std::thread( ( &Finder::findFile ), this->ListView, FilePath, std::ref(imageIndex) );
+				//MutexForThread.unlock();
 				return 0;
 			}
 			return 0;

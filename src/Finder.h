@@ -7,9 +7,11 @@
 #include <atlctrls.h>
 #include <atlfile.h>
 #include <atlstr.h>
-
+#include <mutex>
 #include <atomic>
 #include <tuple>
+
+
 #include "resource2.h"
 
 
@@ -20,7 +22,7 @@ class Finder
 {
 public:
     void create( HWND m_hWnd );
-    void findFile( CString szPath,int &i );
+    void findFile( CString szPath, int& i );
     std::tuple<CString, CString> split( CString buf );
     HWND getHWND()const;
     BOOL getItemText( INT nItem, int nSub, CString& pszText )const;
@@ -32,10 +34,8 @@ public:
     void sort( LPNMHDR func );
     void setReverse();
     BOOL getReverse()const;
-    void SetAtomic()
-    {
-   //     StopThread = !StopThread;
-    }
+    void DeleteAllItems();
+    void SetAtomic();
     struct AdditionalTmp
     {
          BOOL bReverse;
@@ -43,7 +43,8 @@ public:
          int columnInd;
     };
 private:
-   // std::atomic<BOOL> StopThread=FALSE;
+    std::atomic_bool StopThread=false;
+   // std::mutex MutexForThread;
     AdditionalTmp Tmp;
     CImageList hSmall;
     INT nameColumnSize;

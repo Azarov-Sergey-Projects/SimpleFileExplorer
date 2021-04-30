@@ -1,5 +1,5 @@
 #include "Finder.h"
-#include "DialogBar.h"
+
 
 
 void Finder::create( HWND m_hWnd )
@@ -20,7 +20,6 @@ void Finder::create( HWND m_hWnd )
 
 void Finder::findFile( CString szPath, int& i )
 {
-	CString ExtentionFILE;
 	CFindFile FileSearch;
 	CString S = szPath + TEXT( "\\*.*" );
 	BOOL bFlag = FileSearch.FindFile( S );
@@ -43,10 +42,10 @@ void Finder::findFile( CString szPath, int& i )
 					findFile( FileSearch.GetFilePath(), i );
 				}
 				view_List( FileSearch.GetFileName(), i, FileSearch.GetFilePath() );
-				/*if( StopThread )
+				if( StopThread )
 				{
 					return;
-				}*/
+				}
 				i++;
 			}
 		} while( FileSearch.FindNextFileW() );
@@ -123,7 +122,7 @@ void Finder::setListViewSize()
 {
 	sizeListView.bottom= sizeDialogBox.bottom-sizeDialogBox.bottom/8;
 	sizeListView.top =sizeDialogBox.top;
-	sizeListView.right =sizeDialogBox.right-sizeDialogBox.right/2.5;
+	sizeListView.right =sizeDialogBox.right-sizeDialogBox.right/static_cast<LONG>(2.5);
 	sizeListView.left =sizeDialogBox.left;
 }
 
@@ -196,4 +195,14 @@ void Finder::setReverse()
 BOOL Finder::getReverse()const
 {
 	return Tmp.bReverse;
+}
+
+void Finder::DeleteAllItems()
+{
+	Tmp.ListView.DeleteAllItems();
+}
+
+void Finder::SetAtomic()
+{
+	StopThread = (!StopThread);
 }

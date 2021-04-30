@@ -12,7 +12,7 @@
 
 
 //static std::atomic_bool StopThread = FALSE;
-
+//static std::mutex MutexForThread;
 
 class DialogBar :public CDialogImpl<DialogBar>
 {
@@ -49,7 +49,6 @@ public:
 	LRESULT OnCloseCmd( UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/ );
 	
 
-
 private:
 	CString FilePath;
 	CString fileName;
@@ -57,5 +56,5 @@ private:
 	std::thread FindThread;
 	CStatic imageFile;
 	HBITMAP Image;
-	int i=0;
+	int imageIndex;
 };
