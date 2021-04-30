@@ -1,4 +1,5 @@
 #pragma once
+#include <atomic>
 #include <atlbase.h>
 #include <atlwin.h>
 #include <atlapp.h>
@@ -7,9 +8,10 @@
 #include <atlctrls.h>
 #include <atlfile.h>
 #include <atlstr.h>
-#include <mutex>
-#include <atomic>
+
+//#include <mutex>
 #include <tuple>
+
 
 
 #include "resource2.h"
@@ -43,7 +45,7 @@ public:
          int columnInd;
     };
 private:
-    std::atomic_bool StopThread=false;
+    std::atomic_bool StopThread;
    // std::mutex MutexForThread;
     AdditionalTmp Tmp;
     CImageList hSmall;
