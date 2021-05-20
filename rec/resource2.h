@@ -1,6 +1,6 @@
 //{{NO_DEPENDENCIES}}
 // Microsoft Visual C++ generated include file.
-// Used by MyDialog.rc
+// Used by Dialog.rc
 //
 #define IDD_MYDIALOGBAR                 1001
 #define IDC_BUTTON_APPLY                1002

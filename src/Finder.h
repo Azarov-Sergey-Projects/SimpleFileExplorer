@@ -13,7 +13,6 @@
 #include <mutex>
 #include <thread>
 
-//#include "resource2.h"
 
 
 int CALLBACK CompareFunc( LPARAM lParam1, LPARAM lParam2, LPARAM lParamSort );
@@ -35,28 +34,24 @@ public:
     void sort( LPNMHDR func );
     void setReverse();
     BOOL getReverse()const;
-    void DeleteAllItems();
-    void SetAtomic();
     struct AdditionalTmp
     {
          BOOL bReverse;
          CListViewCtrl ListView;
          int columnInd;
     };
-
     void StartThread( CString path );
     void EndThread();
 private:
     int imageIndex;
-    std::atomic_bool StopThread = FALSE;
-    std::mutex MutexForThread;
+    std::atomic<bool> StopThread = false;
     std::thread ThreadFindFile;
+    std::mutex m;
     AdditionalTmp Tmp;
     CImageList hSmall;
     INT nameColumnSize;
     INT extentionColumnSize;
     INT pathColumnSize;
-    LVITEM lvItem;
     CString path;
     CRect sizeDialogBox;
     CRect sizeListView;

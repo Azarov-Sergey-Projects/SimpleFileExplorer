@@ -35,18 +35,22 @@ void Finder::findFile( CString szPath, int& i )
 			}
 			else
 			{
-				if( FileSearch.IsDirectory() )
-				{
-					findFile(  FileSearch.GetFilePath(), i );
-				}
-				view_List( FileSearch.GetFileName(), i, FileSearch.GetFilePath() );
 				if( StopThread )
 				{
-					return;
+					break;
 				}
+				if( FileSearch.IsDirectory() )
+				{
+					if( StopThread )
+					{
+						break;
+					}
+					findFile( FileSearch.GetFilePath(), i );
+				}
+				view_List( FileSearch.GetFileName(), i, FileSearch.GetFilePath() );
 				i++;
 			}
-		} while( FileSearch.FindNextFileW() );
+		}while( FileSearch.FindNextFileW() );
 		FileSearch.Close();
 	}
 	Tmp.ListView.SetImageList( hSmall, 1 );
@@ -54,6 +58,7 @@ void Finder::findFile( CString szPath, int& i )
 				
 void Finder::view_List( CString name, int i, CString path )
 {
+	LVITEM lvItem;
 	SHFILEINFOW lp{};
 	CString nameWithoutEx = std::get<0>( split( name ) );
 	CString extention = std::get<1>( split( name ) );
@@ -65,9 +70,12 @@ void Finder::view_List( CString name, int i, CString path )
 	lvItem.iSubItem = 0;
 	lvItem.pszText = const_cast< LPWSTR >( nameWithoutEx.GetString() );
 	lvItem.cchTextMax = nameWithoutEx.GetLength();
+	m.lock();
 	Tmp.ListView.InsertItem( &lvItem );
+	
 	Tmp.ListView.SetItemText( i, 1, extention.GetString() );
 	Tmp.ListView.SetItemText( i, 2, path.GetString() );
+	m.unlock();
 	DWORD num = GetFileAttributesW( path.GetString() );
 	SHGetFileInfoW( path.GetString(), num, &lp, sizeof( lp ),
 					SHGFI_SYSICONINDEX | SHGFI_ICON | SHGFI_USEFILEATTRIBUTES );
@@ -118,10 +126,10 @@ void Finder::setDialogSize( CRect rect )
 
 void Finder::setListViewSize()
 {
-	sizeListView.bottom= sizeDialogBox.bottom-sizeDialogBox.bottom/8;
-	sizeListView.top =sizeDialogBox.top;
-	sizeListView.right =sizeDialogBox.right-sizeDialogBox.right/static_cast<LONG>(2.5);
-	sizeListView.left =sizeDialogBox.left;
+	sizeListView.bottom = sizeDialogBox.bottom - sizeDialogBox.bottom / 8;
+	sizeListView.top = sizeDialogBox.top;
+	sizeListView.right = sizeDialogBox.right - sizeDialogBox.right / static_cast< LONG >( 2.5 );
+	sizeListView.left = sizeDialogBox.left;
 }
 
 void Finder::setImagePreViewSize()
@@ -195,34 +203,25 @@ BOOL Finder::getReverse()const
 	return Tmp.bReverse;
 }
 
-void Finder::DeleteAllItems()
-{
-	Tmp.ListView.DeleteAllItems();
-}
-
-void Finder::SetAtomic()
-{
-	StopThread = (!StopThread);
-}
-
 void Finder::StartThread(CString path)
 {
+	imageIndex = 0;
 	if( ThreadFindFile.joinable() )
 	{
-		SetAtomic();
+		StopThread = true;
 		ThreadFindFile.join();
-		SetAtomic();
+		StopThread = false;
 	}
-	imageIndex = 0;
-	ThreadFindFile=std::thread(  (&Finder::findFile),this , path, std::ref(imageIndex) );
+	Tmp.ListView.DeleteAllItems();
+	ThreadFindFile = std::thread( ( &Finder::findFile ), this, path, std::ref( imageIndex ) );
 }
 
 void Finder::EndThread()
 {
 	if( ThreadFindFile.joinable() )
 	{
-		StopThread = TRUE;
+		StopThread = true;
 		ThreadFindFile.join();
-		StopThread = FALSE;
+		StopThread = false;
 	}
 }

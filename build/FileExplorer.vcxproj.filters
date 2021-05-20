@@ -45,6 +45,9 @@
     <ClInclude Include="..\src\DialogBar.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\rec\resource2.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="..\rec\Lab1_WTL.ico">

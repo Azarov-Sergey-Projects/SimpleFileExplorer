@@ -1,17 +1,14 @@
 #include "DialogBar.h"
 
-
-
 LRESULT DialogBar::OnCommand( UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled )
 {
-	
 	switch( wParam )
 	{
+	
 		case IDC_BUTTON_EXIT:
 			OnCloseCmd( uMsg, wParam, lParam, bHandled );
 			return 0;
 		case IDC_BUTTON_APPLY:
-			ListView.DeleteAllItems();
 			GetDlgItemTextW( IDC_SEARCH_TEXT_BAR, FilePath );
 			if( FilePath.IsEmpty() )
 			{
@@ -23,8 +20,10 @@ LRESULT DialogBar::OnCommand( UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHa
 				ListView.StartThread( FilePath );
 				return 0;
 			}
+
 			return 0;
 	}
+	return 0;
 }
 
 LRESULT DialogBar::OnItemClick( int, LPNMHDR pnmh, BOOL& )
