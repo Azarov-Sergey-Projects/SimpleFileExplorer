@@ -40,13 +40,14 @@ public:
          CListViewCtrl ListView;
          int columnInd;
     };
-    void StartThread( CString path );
-    void EndThread();
+    void startThread( CString path );
+    void endThread();
+    BOOL clear();
 private:
     int imageIndex;
-    std::atomic<bool> StopThread = false;
+    std::atomic_bool StopThread = FALSE;
+    std::recursive_mutex m;
     std::thread ThreadFindFile;
-    std::mutex m;
     AdditionalTmp Tmp;
     CImageList hSmall;
     INT nameColumnSize;

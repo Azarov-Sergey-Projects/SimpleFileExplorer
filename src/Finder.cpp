@@ -1,13 +1,11 @@
 #include "Finder.h"
 
-
 void Finder::create( HWND m_hWnd )
 {
 	ListView_hWnd = Tmp.ListView.Create( m_hWnd, sizeListView, NULL, WS_CHILD | WS_VISIBLE | WS_VSCROLL |
 								 WS_CLIPSIBLINGS | WS_CLIPCHILDREN |
 								 LVS_REPORT | LVS_AUTOARRANGE | DS_ABSALIGN |
 								 LVS_SHOWSELALWAYS | LVS_SHAREIMAGELISTS );
-	
 	Tmp.ListView.InsertColumn(0, TEXT( "FileName" ), LVCFMT_LEFT, nameColumnSize );
 	Tmp.ListView.InsertColumn(1, TEXT( ".*" ), LVCFMT_LEFT, extentionColumnSize );
 	Tmp.ListView.InsertColumn(2,  TEXT( "Path" ), LVCFMT_LEFT, pathColumnSize );
@@ -35,27 +33,23 @@ void Finder::findFile( CString szPath, int& i )
 			}
 			else
 			{
-				if( StopThread )
-				{
-					break;
-				}
 				if( FileSearch.IsDirectory() )
 				{
-					if( StopThread )
-					{
-						break;
-					}
-					findFile( FileSearch.GetFilePath(), i );
+					findFile( FileSearch.GetFilePath(), i);
+				}
+				if( StopThread )
+				{
+					return;
 				}
 				view_List( FileSearch.GetFileName(), i, FileSearch.GetFilePath() );
 				i++;
 			}
-		}while( FileSearch.FindNextFileW() );
+		} while( FileSearch.FindNextFileW() );
 		FileSearch.Close();
 	}
 	Tmp.ListView.SetImageList( hSmall, 1 );
 }
-				
+
 void Finder::view_List( CString name, int i, CString path )
 {
 	LVITEM lvItem;
@@ -70,12 +64,9 @@ void Finder::view_List( CString name, int i, CString path )
 	lvItem.iSubItem = 0;
 	lvItem.pszText = const_cast< LPWSTR >( nameWithoutEx.GetString() );
 	lvItem.cchTextMax = nameWithoutEx.GetLength();
-	m.lock();
 	Tmp.ListView.InsertItem( &lvItem );
-	
 	Tmp.ListView.SetItemText( i, 1, extention.GetString() );
 	Tmp.ListView.SetItemText( i, 2, path.GetString() );
-	m.unlock();
 	DWORD num = GetFileAttributesW( path.GetString() );
 	SHGetFileInfoW( path.GetString(), num, &lp, sizeof( lp ),
 					SHGFI_SYSICONINDEX | SHGFI_ICON | SHGFI_USEFILEATTRIBUTES );
@@ -203,25 +194,30 @@ BOOL Finder::getReverse()const
 	return Tmp.bReverse;
 }
 
-void Finder::StartThread(CString path)
+void Finder::startThread(CString path)
 {
-	imageIndex = 0;
 	if( ThreadFindFile.joinable() )
 	{
-		StopThread = true;
-		ThreadFindFile.join();
-		StopThread = false;
+		StopThread = TRUE;
+		ThreadFindFile.detach();
 	}
-	Tmp.ListView.DeleteAllItems();
+	imageIndex = 0;
+	StopThread = FALSE;
 	ThreadFindFile = std::thread( ( &Finder::findFile ), this, path, std::ref( imageIndex ) );
 }
 
-void Finder::EndThread()
+void Finder::endThread()
 {
 	if( ThreadFindFile.joinable() )
 	{
 		StopThread = true;
 		ThreadFindFile.join();
-		StopThread = false;
 	}
 }
+
+
+BOOL Finder::clear()
+{
+	return Tmp.ListView.DeleteAllItems() && hSmall.RemoveAll();
+}
+

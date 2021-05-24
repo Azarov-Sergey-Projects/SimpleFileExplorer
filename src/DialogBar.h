@@ -53,6 +53,7 @@ private:
 	CString fileName;
 	Finder ListView;
 	CStatic imageFile;
+	std::mutex m;
 	HBITMAP Image;
 	int imageIndex;
 };

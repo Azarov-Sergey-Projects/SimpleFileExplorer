@@ -17,7 +17,8 @@ LRESULT DialogBar::OnCommand( UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHa
 			}
 			else
 			{
-				ListView.StartThread( FilePath );
+				ListView.clear();
+				ListView.startThread( FilePath );
 				return 0;
 			}
 
@@ -65,7 +66,7 @@ LRESULT DialogBar::OnInitDialog( UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lPar
 
 LRESULT DialogBar::OnCloseCmd( UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/ )
 {
-	ListView.EndThread();
+	ListView.endThread();
 	EndDialog( NULL );
 	return 0;
 }
